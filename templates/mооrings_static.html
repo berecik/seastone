@@ -1,0 +1,278 @@
+{% extends 'base.html' %}
+{% block content %}
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.marinakamienpomorski.pl/"><img src="http://www.marinakamienpomorski.pl/images/default/naszywka.png" /></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="/">Editing</a></li>
+                    <li><a href="/">Booking</a></li>
+                    <li class="active"><a href="#">Demo</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <div class="row">
+            <form class="navbar-form navbar-right">
+                <div class="form-group input-group col-sm-12">
+                    <input type="text" class="form-control" name="date_range" id="date_range" placeholder="Select date range..">
+                </div>
+                <div class="form-group input-group col-sm-12">
+                    <div id="length">
+                        <input type="radio" id="length1" name="length" value="0-10"><label for="length1">0m-10m</label>
+                        <input type="radio" id="length2" name="length" value="10.01-15" checked="checked"><label for="length2">10.01m-15m</label>
+                        <input type="radio" id="length3" name="length" value="15.01-20"><label for="length3">15.01m-20m</label>
+                    </div>
+                    <input type="submit" value="Search">
+                </div>
+            </form>
+        </div>
+        <div class="row">
+
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <p contenteditable="true">Pirs 1</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 1 Moooring B1</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 1 Moooring B2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 1 Moooring B3</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 1 Moooring B4</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 1 Moooring B5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="well">
+                            <form class="row">
+                                <input class="col-sm-12" name="new_pier_name" type="text" placeholder="Type name of new mooring">
+                                <div class="col-sm-12">
+                                    <label>Length:</label>
+                                    <input class="" size="2" type="text" name="min_length" value="0"><label for="min_length">m.</label>
+                                    &nbsp;<b>-</b>&nbsp;
+                                    <input class="" size="2" type="text" name="max_length" value="20"><label for="max_length">m.</label>
+                                </div>
+                                <input class="col-sm-10 col-sm-offset-2" value="Add" type="submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <p contenteditable="true">Pirs 2</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B1</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B3</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B4</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 2 Moooring B6</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="well">
+                            <form class="row">
+                                <input class="col-sm-12" name="new_pier_name" type="text" placeholder="Type name of new mooring">
+                                <div class="col-sm-12">
+                                    <label>Length:</label>
+                                    <input class="" size="2" type="text" name="min_length" value="0"><label for="min_length">m.</label>
+                                    &nbsp;<b>-</b>&nbsp;
+                                    <input class="" size="2" type="text" name="max_length" value="20"><label for="max_length">m.</label>
+                                </div>
+                                <input class="col-sm-10 col-sm-offset-2" value="Add" type="submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <p contenteditable="true">Pirs 3</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A1</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A2</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A3</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A4</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A5</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A6</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A7</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-10 col-sm-offset-2">
+                        <div class="well">
+                            <p>Pirs 3 Moooring A8</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="well">
+                            <form class="row">
+                                <input class="col-sm-12" name="new_pier_name" type="text" placeholder="Type name of new mooring">
+                                <div class="col-sm-12">
+                                    <label>Length:</label>
+                                    <input class="" size="2" type="text" name="min_length" value="0"><label for="min_length">m.</label>
+                                    &nbsp;<b>-</b>&nbsp;
+                                    <input class="" size="2" type="text" name="max_length" value="20"><label for="max_length">m.</label>
+                                </div>
+                                <input class="col-sm-10 col-sm-offset-2" value="Add" type="submit">
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-sm-3">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <form>
+                                    <input name="new_pier_name" type="text" placeholder="Type name of new pier">
+                                    <input value="Add" type="submit">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+        <p>Footer Text</p>
+    </footer>
+{% endblock content %}

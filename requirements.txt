@@ -1,0 +1,39 @@
+Django
+psycopg2
+
+django-extensions # for improve command line commands and debugging
+Werkzeug # deploy helper, we not need this yet, provide also onsite debuger and this is nice
+django-mptt # to represent and manage hierarchical data structures
+
+django-debug-toolbar
+watson
+djangorestframework # Django support for rest
+markdown        # Markdown support for the browsable API.
+django-filter   # Filtering support
+django-bower    # Mange js applications
+
+# Django mongodb library
+# follow https://django-mongodb-engine.readthedocs.org/en/latest/topics/setup.html
+# git+https://github.com/django-nonrel/django@nonrel-1.5
+# git+https://github.com/django-nonrel/djangotoolbox
+# git+https://github.com/django-nonrel/mongodb-engine
+# Django kit for couchdb
+couchdbkit
+
+# Deploy on production
+uwsgi
+gunicorn
+setproctitle
+
+# JSON request
+django-braces
+
+# for timezone problem
+pytz
+
+# for urlib2 problems
+pycurl
+
+# Social login, so the fun just will begin
+django-social-auth
+python-social-auth

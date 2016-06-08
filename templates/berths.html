@@ -1,0 +1,237 @@
+{% extends 'base.html' %}
+{% block scripts %}
+    {{ block.super }}
+    <script>
+        var ships = [
+            {
+                value: '0',
+                label: 'Sofia',
+                name: 'Sofia',
+                length: '8.86',
+                flag: 'nl'
+            },
+            {
+                value: '1',
+                label: 'Titanic',
+                name: 'Titanic',
+                length: '268.99',
+                flag: 'gb'
+            },
+            {
+                value: '2',
+                label: 'Bismarck',
+                name: 'Bismarck',
+                length: '251',
+                flag: 'de'
+            },
+            {
+                value: '3',
+                label: 'Enterprise',
+                name: 'Enterprise',
+                length: '330',
+                flag: 'us'
+            },
+            {% for ship in ships %}
+                {
+                    value: '{{ ship.id }}',
+                    label: '{{ ship }}',
+                    name: '{{ ship.name }}',
+                    length: '{{ ship.length }}',
+                    flag: '{{ship.flag.code}}'
+                },
+            {% endfor %}
+        ]
+    </script>
+{% endblock %}
+{% block content %}
+    <div id="add_stay_form" title="Dodaj postój" class="container">
+        <form method="post">
+            <fieldset>
+                <div class="row">
+                    <input type="hidden" name="ship_id" id="ship_id" value="">
+                    <input type="hidden" name="berth_id" id="berth_id" value="">
+                    <label for="ship_name" class="">Jacht</label>
+                    <input type="text" name="ship_name" id="ship_select" value="" class="text ui-widget-content ui-corner-all">
+                    <select name="flag" id="ship_flag">
+                        <option>wybierz flagę...</option>
+                        <option value="pl">Polska</option>
+                        <option value="de">Niemcy</option>
+                        <option value="se">Szwecja</option>
+                        <option value="dk">Dania</option>
+                        <option value="nl">Holandia</option>
+                        <option value="no">Norwegia</option>
+                        <option value="fr">Francja</option>
+                        <option value="be">Belgia</option>
+                        <option value="fi">Finlandia</option>
+                        <option value="cz">Czechy</option>
+                        <option value="gb">Wielka Brytania</option>
+                        <option value="us">USA</option>
+                    </select>
+                    <img id="ship_flag_img" src="" class="ui-state-default" alt="">
+                    <label for="length" class="">Długość</label>
+                    <input type="text" name="length" id="ship_length" value="" class="text ui-widget-content ui-corner-all number ship_val">
+                </div>
+                <hr>
+                <div class="row">
+                    <label for="email" class="">Data Od</label>
+                    <input type="text" class="date" name="date_start">
+                </div>
+                <div class="row">
+                    <label for="email" class="">Data Do</label>
+                    <input type="text" class="date" name="date_end">
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <input type="submit" value="Dodaj postój">
+                </div>
+                {% csrf_token %}
+            </fieldset>
+        </form>
+    </div>
+    <nav class="navbar">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="http://www.marinakamienpomorski.pl/"><img src="http://www.marinakamienpomorski.pl/images/default/naszywka.png" /></a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li><a href="#">Rezerwacja, zajmowanie miejsc</a></li>
+                    <li><a href="#">Pachołki, przyłącza i liczniki</a></li>
+                    <li class="active"><a href="#">Edycja układu miejsc i postumentów</a></li>
+                </ul>
+                {% if action == 'book' %}
+                    <form class="navbar-form navbar-right">
+                        <div class="form-group input-group">
+                            <input type="text" class="form-control" name="date_range" id="date_range" placeholder="Wybierz przedział dat...">
+                        </div>
+                        <div class="form-group input-group">
+                            <div id="length">
+                                <input type="radio" id="length1" name="length" value="0-10"><label for="length1">0m-10m</label>
+                                <input type="radio" id="length2" name="length" value="10.01-15" checked="checked"><label for="length2">10.01m-15m</label>
+                                <input type="radio" id="length3" name="length" value="15.01-20"><label for="length3">15.01m-20m</label>
+                            </div>
+                            <input type="submit" value="Pokaż dostępne miejsca">
+                        </div>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <div class="container text-center">
+        <div class="row accordion {% if action == 'edit' %}piers_sort{% endif %}">
+            {% for pier, moorings in piers %}
+                <div class="col-sm-12">
+                    <div class="row pier header panel-body text-left">
+                        <input class="pier_id" type="hidden" value="{{ pier.id }}">
+                        <span contenteditable="true">{{ pier.name }}</span>
+                    </div>
+                    <div class="moorings row {% if action == 'edit' %}moorings_sort{% endif %}">
+                        {% for mooring in moorings %}
+                            {% if mooring.type == "mooring" %}
+                                {#                                {% if not forloop.counter|divisibleby:2 %}#}
+                                {#                                    <div class="row">#}
+                                {#                                {% endif %}#}
+
+                                <div class="{% if pier.double_site %} col-sm-6 {% else %} col-sm-11 col-sm-offset-1 {% endif %} mooring {% if action == 'edit' %}mooring_sort{% endif %}">
+                                    <input class="mooring_id" type="hidden" value="{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}">
+                                    <div class="well row">
+                                        {#                                            <p>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.) {% if mooring.ship %}{{ mooring.ship }}{% else %}<button>Dodaj postój</button><button>Dodaj rezydenta</button>{% endif %}</p>#}
+                                        <div class="col-sm-3">{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div class="col-sm-3">{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div class="col-sm-6">{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class="create_stay" onclick="create_stay({{ mooring.id }})">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div>
+                                    </div>
+                                </div>
+
+                                {#                                    <div class="col-sm-11 col-sm-offset-1 mooring">#}
+                                {#                                        <input class="mooring_id" type="hidden" value="{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}">#}
+                                {#                                        <div class="well">#}
+                                {#                                            <p>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</p>#}
+                                {#                                        </div>#}
+                                {#                                    </div>#}
+
+                                {#                                {% if foorloop.last or forloop.counter|divisibleby:2 %}#}
+                                {#                                    </div>#}
+                                {#                                {% endif %}#}
+                            {% elif mooring.type == "hub" %}
+                                {#                                <div class="row">#}
+                                <div class="col-sm-12 mooring">
+                                    <input class="mooring_id" type="hidden" value="{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}">
+                                    <div class="well row">{{ mooring.name }}:
+                                        {% for connector in mooring.connectors %}
+                                            <div class="col-sm-12 row">
+                                                <div class="col-sm-5"><button>Podłącz jacht</button></div><div class="col-sm-2">{{ connector.name }}</div><div class="col-sm-5"><button>Spisz stan</button> Licznik: {{ connector.counter }}</div>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                {#                                </div>#}
+                            {% endif %}
+                        {% endfor %}
+                        {% if action == 'edit' %}
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="well">
+                                        <form class="row" method="post">
+                                            <input class="col-sm-12" name="new_mooring_name" type="text" placeholder="Wpisz nazwę nowego miejsca postojowego">
+                                            <div class="col-sm-12">
+                                                <label>Dopuszczalna długość:</label>
+                                                <input class="" size="2" type="text" name="min_length" value="0"><label for="min_length">m.</label>
+                                                &nbsp;<b>-</b>&nbsp;
+                                                <input class="" size="2" type="text" name="max_length" value="20"><label for="max_length">m.</label>
+                                            </div>
+                                            <input type="hidden" name="new_mooring_pier" value="{{ pier.id }}">
+                                            <input class="col-sm-10 col-sm-offset-2" value="Dodaj miejsce postojowe" type="submit">
+                                            {% csrf_token %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-12">
+                                    <div class="well">
+                                        <form class="row" method="post">
+                                            <input class="col-sm-12" name="new_hub_name" type="text" placeholder="Wpisz nazwę nowego postumentu">
+                                            <div class="col-sm-12">
+                                                <label>Ilość przyłączy:</label>
+                                                <input class="" size="2" type="text" name="amount" value="8">
+                                            </div>
+                                            <input type="hidden" name="new_hub_pier" value="{{ pier.id }}">
+                                            <input class="col-sm-10 col-sm-offset-2" value="Dodaj nowy postument" type="submit">
+                                            {% csrf_token %}
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+            {% if  action == 'edit' %}
+                <div class="col-sm-{{ column_size }}">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="panel panel-default text-left">
+                                <div class="panel-body">
+                                    <form method="post">
+                                        <input name="new_pier_name" type="text" placeholder="Wpisz nazwę nowego pomostu">
+                                        <label for="double_site">Dwustronny:</label><input type="checkbox" name="double_site" id="double_site" value="1" checked="checked">
+                                        <input value="Dodaj pomost" type="submit">
+                                        {% csrf_token %}
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+        <p>Footer Text</p>
+    </footer>
+{% endblock content %}
