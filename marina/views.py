@@ -55,7 +55,7 @@ def berths(request):
         _gen_flags()
 
     if request.GET.get("gen_marina"):
-        _gen_marina()
+        _gen_marina(marina)
 
     order_pier = request.GET.get("order_pier")
     if order_pier:
