@@ -54,6 +54,9 @@ def berths(request):
     if request.GET.get("gen_flags"):
         _gen_flags()
 
+    if request.GET.get("gen_marina"):
+        _gen_marina()
+
     order_pier = request.GET.get("order_pier")
     if order_pier:
         new_order = filter(lambda x: x, order_pier.split('|'))
