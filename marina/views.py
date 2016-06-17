@@ -170,7 +170,7 @@ def berths(request):
     return render(request, _template, context)
 
 def map_demo(request):
-    _template = "map.html"
+    _template = "chart.html"
     context = {}
     return render(request, _template, context)
 
