@@ -47,7 +47,7 @@ class BerthDelete(DeleteView):
 
 
 def berths(request):
-    _template = "berths.html"
+    _template = "chart_ui.html"
     piers = []
     marina = Marina.objects.all()[0]
 
@@ -143,6 +143,11 @@ def berths(request):
 
     for pier in Pier.objects.filter(marina=marina):
         _moorings = []
+        berths = Berth.objects.filter(pier=pier)
+        _len = len(berths)
+        if pier.left_site and pier.right_site:
+            _len = int(_len/2)+(_len%2)
+        pier.len = _len
         for mooring in Berth.objects.filter(pier=pier):
             mooring.type = "mooring"
             stays = Stay.objects.filter(berth=mooring)

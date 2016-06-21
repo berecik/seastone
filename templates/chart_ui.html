@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block scripts %}
+    {{ block.super }}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
+    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <style>
+        #mapid { height: 800px; }
+    </style>
+    <script>
+        hubs = {};
+        places = {};
+        $(document).ready(function() {
+            var _height = $(window).height()-50;
+            $('#mapid').css('height', _height);
+            var map = L.map('mapid', {
+                {#                crs: L.CRS.Simple#}
+            }).setView([53.9747, 14.769], 18);
+            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYmVyZXQiLCJhIjoiY2lwM3I3NHVzMDAxendibHlybTNvbWZ5eSJ9.QeqzTkthT-iHFe6z9WZiuA', {
+                maxZoom: 22,
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> SeaStone Marina Manager © Adam Mańczuk, Mariusz Palenica',
+                id: 'mapbox.streets'
+            }).addTo(map);
+
+            {% for pier, moorings in piers %}
+                var _xb = {{ pier.loc_start_x }};
+                var _xe = {{ pier.loc_end_x }};
+                var _yb = {{ pier.loc_start_y }};
+                var _ye = {{ pier.loc_end_y }};
+
+                var _n = {{ pier.len }};
+
+                var _lpm = 1/111120;
+
+                var _lmj = 12/111120;
+                var _lmi = 2/111120;
+                var _r = 90/(90-_xb);
+                var _xp = _xb-_xe;
+                var _yp = _yb-_ye;
+                var _xpn = _xp/(_n*6);
+                var _ypn = _yp/(_n*6);
+
+                var _lp = Math.sqrt(_xp*_xp+_yp*_yp);
+                var _fpm = _lpm/_lp;
+                var _fmj = _lmj/_lp;
+                var _fmi = _lmi/_lp;
+                var _xpm = (_xp*_fpm)*_r;
+                var _ypm = (_yp*_fpm)*-1;
+                var _xmj = (_xp*_fmj)*_r;
+                var _ymj = (_yp*_fmj)*-1;
+                var _xmi = (_xp*_fmi)*_r;
+                var _ymi = (_yp*_fmi)*-1;
+                var _im = 0;
+                var _li = 0;
+
+                L.polygon([
+                    [_xb+_ypm, _yb+_xpm],
+                    [_xe+_ypm, _ye+_xpm],
+                    [_xe-_ypm, _ye-_xpm],
+                    [_xb-_ypm, _yb-_xpm]
+                ]).addTo(map);
+
+                var place;
+                var hub;
+
+                {% for mooring in moorings %}
+                    place = null;
+                    hub = null;
+                    {% if mooring.type == "mooring" %}
+                        {% if pier.left_site %}
+                            {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
+                                place = L.polygon([
+                                    [_xb-(_xpn*(_li*6+1))-_ymi, _yb-(_ypn*(_li*6+1))-_xmi],
+                                    [_xb-(_xpn*(_li*6+3))-_ymj, _yb-(_ypn*(_li*6+3))-_xmj],
+                                    [_xb-(_xpn*(_li*6+5))-_ymi, _yb-(_ypn*(_li*6+5))-_xmi]
+                                ]).addTo(map);
+                            {% if pier.right_site %}}{% endif %}
+                        {% endif %}
+                        {% if pier.right_site %}
+                            {% if pier.left_site %}if(_im%2==1){ _li = (_im-1)/2; {% else %} _li = _im;{% endif %}
+                                place = L.polygon([
+                                    [_xb-(_xpn*(_li*6+1))+_ymi, _yb-(_ypn*(_li*6+1))+_xmi],
+                                    [_xb-(_xpn*(_li*6+3))+_ymj, _yb-(_ypn*(_li*6+3))+_xmj],
+                                    [_xb-(_xpn*(_li*6+5))+_ymi, _yb-(_ypn*(_li*6+5))+_xmi]
+                                ]).addTo(map);
+                            {% if pier.left_site %}}{% endif %}
+                        {% endif %}
+                        _im++;
+                        if(place){
+                            place.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
+                            places[{{ mooring.id }}] = place;
+                        }
+                    {% endif %}
+                    {% if mooring.type == "hub" %}
+                        hub = L.circle([_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))], 1).addTo(map);
+                        hub.bindPopup("<b>{{ mooring }}</b>");
+                        hubs[{{ mooring.id }}] = hub;
+                    {% endif %}
+                {% endfor %}
+            {% endfor %}
+        });
+    </script>
+{% endblock scripts %}
+{% block content %}
+    <div id="mapid"></div>
+{% endblock content %}

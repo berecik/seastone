@@ -17,7 +17,14 @@ class Pier(models.Model):
     marina = models.ForeignKey(Marina)
     name = models.CharField(max_length=1024, db_index=True)
     order = models.IntegerField(default=0)
-    double_site = models.BooleanField(default=True)
+    # double_site = models.BooleanField(default=True)
+    left_site = models.BooleanField(default=True)
+    right_site = models.BooleanField(default=True)
+    loc_start_x = models.FloatField()
+    loc_start_y = models.FloatField()
+    loc_end_x = models.FloatField()
+    loc_end_y = models.FloatField()
+
 
     def __unicode__(self):
         # return "%s %s" % (unicode(self.marina), self.name)
@@ -33,6 +40,7 @@ class Berth(models.Model):
     min_length = models.DecimalField(max_digits=6, decimal_places=2)
     max_length = models.DecimalField(max_digits=6, decimal_places=2)
     order = models.IntegerField(default=0)
+    # loc = models.TextField()
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.pier), self.name)
@@ -45,6 +53,8 @@ class Hub(models.Model):
     pier = models.ForeignKey(Pier)
     name = models.CharField(max_length=1024, db_index=True)
     order = models.IntegerField(default=0)
+    # loc_x = models.FloatField()
+    # loc_y = models.FloatField()
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.pier), self.name)

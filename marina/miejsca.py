@@ -5,43 +5,50 @@ from .models import Pier, Berth, Hub, Connector
 
 miejsca = [
     ['A', [
-        False,
+        False, True,
+        53.9741927, 14.76704, 53.9737165, 14.7674627,
         [10, None],
         [1, None],
         [2, 6, 9]
     ]],
     ['B', [
-        True,
+        True, True,
+        53.974448, 14.767642, 53.97391, 14.768145,
         [27, 28],
         [11, 44],
         [42, 38, 32, 28]
     ]],
     ['C', [
-        True,
+        True, True,
+        53.9750375, 14.768005, 53.97411, 14.76886,
         [70, 71],
         [45, 96],
         [73, 76, 80, 84, 89, 92]
     ]],
     ['D', [
-        True,
+        True, True,
+        53.975435, 14.76856, 53.97436, 14.769563,
         [127, 128],
         [97, 158],
         [154, 150, 146, 142, 138, 132, 128]
     ]],
     ['E', [
-        True,
+        True, True,
+        53.974958, 14.770105, 53.974897, 14.771,
         [172, 173],
         [159, 186],
         [162, 166, 170]
     ]],
     ['F', [
-        True,
+        True, True,
+        53.975321, 14.76981, 53.97523, 14.77107,
         [206, 207],
         [187, 226],
         [190, 194, 200, 206]
     ]],
     ['G', [
-        False,
+        True, False,
+        53.975640, 14.769861, 53.975547, 14.771125,
         [246, None],
         [227, None],
         [230, 238, 244]
@@ -63,9 +70,18 @@ def _gen_marina(marina):
     for pirs, details in miejsca:
         print "Pomost %s" % pirs
 
-        site, starts, ends, hubs = details
+        left_site, right_site, loc_start_x, loc_start_y, loc_end_x, loc_end_y, starts, ends, hubs = details
 
-        po = Pier(marina=marina, name="Pomost %s" % pirs, double_site=site, order=order)
+        po = Pier(
+            marina=marina,
+            name="Pomost %s" % pirs,
+            left_site=left_site,
+            right_site=right_site,
+            loc_start_x=loc_start_x,
+            loc_start_y=loc_start_y,
+            loc_end_x=loc_end_x,
+            loc_end_y=loc_end_y,
+            order=order)
         po.save()
         order +=1
 
