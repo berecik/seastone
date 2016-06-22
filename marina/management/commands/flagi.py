@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 __author__ = 'beret'
 
-from .models import Flag
+from marina.models import Flag
+from django.core.management.base import BaseCommand, CommandError
 
 _dir = "/home/beret/dev/seastone/static/flags"
 
@@ -257,6 +258,16 @@ _COUNTRIES={
     'ZW':u'Zimbabwe'
 }
 
+
+class Command(BaseCommand):
+    help = 'Generate flags'
+
+    # def add_arguments(self, parser):
+    #     parser.add_argument('poll_id', nargs='+', type=int)
+
+    def handle(self, *args, **options):
+        _gen_flags()
+        self.stdout.write(self.style.SUCCESS('Successfully created flags'))
 
 def _gen_flags():
     for f in Flag.objects.all():

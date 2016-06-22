@@ -9,6 +9,19 @@
         #mapid { height: 800px; }
     </style>
     <script>
+            var ships = [
+            {% for ship in ships %}
+                {
+                    value: '{{ ship.id }}',
+                    label: '{{ ship }}',
+                    name: '{{ ship.name }}',
+                    length: '{{ ship.length }}',
+                    flag: '{{ship.flag.code}}'
+                },
+            {% endfor %}
+        ]
+    </script>
+    <script>
         hubs = {};
         places = {};
         $(document).ready(function() {
@@ -103,5 +116,49 @@
     </script>
 {% endblock scripts %}
 {% block content %}
+        <div id="add_stay_form" title="Dodaj postój" class="container">
+        <form method="post">
+            <fieldset>
+                <div class="row">
+                    <input type="hidden" name="ship_id" id="ship_id" value="">
+                    <input type="hidden" name="berth_id" id="berth_id" value="">
+                    <label for="ship_name" class="">Jacht</label>
+                    <input type="text" name="ship_name" id="ship_select" value="" class="text ui-widget-content ui-corner-all">
+                    <select name="flag" id="ship_flag">
+                        <option>wybierz flagę...</option>
+                        <option value="pl">Polska</option>
+                        <option value="de">Niemcy</option>
+                        <option value="se">Szwecja</option>
+                        <option value="dk">Dania</option>
+                        <option value="nl">Holandia</option>
+                        <option value="no">Norwegia</option>
+                        <option value="fr">Francja</option>
+                        <option value="be">Belgia</option>
+                        <option value="fi">Finlandia</option>
+                        <option value="cz">Czechy</option>
+                        <option value="gb">Wielka Brytania</option>
+                        <option value="us">USA</option>
+                    </select>
+                    <img id="ship_flag_img" src="" class="ui-state-default" alt="">
+                    <label for="length" class="">Długość</label>
+                    <input type="text" name="length" id="ship_length" value="" class="text ui-widget-content ui-corner-all number ship_val">
+                </div>
+                <hr>
+                <div class="row">
+                    <label for="email" class="">Data Od</label>
+                    <input type="text" class="date" name="date_start">
+                </div>
+                <div class="row">
+                    <label for="email" class="">Data Do</label>
+                    <input type="text" class="date" name="date_end">
+                </div>
+                <hr>
+                <div class="row text-center">
+                    <input type="submit" value="Dodaj postój">
+                </div>
+                {% csrf_token %}
+            </fieldset>
+        </form>
+    </div>
     <div id="mapid"></div>
 {% endblock content %}

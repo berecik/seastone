@@ -1,16 +1,15 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
-from django.utils.translation import ugettext as _
-
-from tools import py_to_iso_date, iso_to_py_date, pl_to_py_date
+from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
-from django.core.urlresolvers import reverse_lazy
+# from .flagi import _gen_flags
 
-from .models import Stay, Ship, Pier, Leave, Berth, Flag, Marina, Contract, Hub, Connector
-from .miejsca import _gen_marina
-from .flagi import _gen_flags
+# from marina.management.commands.miejsca import _gen_marina
+from tools import pl_to_py_date
+from .models import Stay, Ship, Pier, Berth, Flag, Marina, Hub, Connector
+
 
 class PierCreate(CreateView):
     model = Pier
@@ -51,11 +50,11 @@ def berths(request):
     piers = []
     marina = Marina.objects.all()[0]
 
-    if request.GET.get("gen_flags"):
-        _gen_flags()
-
-    if request.GET.get("gen_marina"):
-        _gen_marina(marina)
+    # if request.GET.get("gen_flags"):
+    #     _gen_flags()
+    #
+    # if request.GET.get("gen_marina"):
+    #     _gen_marina(marina)
 
     order_pier = request.GET.get("order_pier")
     if order_pier:

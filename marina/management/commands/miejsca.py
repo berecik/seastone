@@ -1,7 +1,21 @@
 # -*- coding: utf-8 -*-
 __author__ = 'beret'
-from .models import Pier, Berth, Hub, Connector
+from marina.models import Pier, Berth, Hub, Connector, Marina
+from django.core.management.base import BaseCommand, CommandError
 
+
+class Command(BaseCommand):
+    help = 'Create marina scheme'
+
+    # def add_arguments(self, parser):
+    #     parser.add_argument('poll_id', nargs='+', type=int)
+
+    def handle(self, *args, **options):
+        marina, created = Marina.objects.get_or_create(name="Marina Kamień Pomorski")
+        if created:
+            marina.save()
+        _gen_marina(marina)
+        self.stdout.write(self.style.SUCCESS('Successfully created marina %s scheme' % marina.name))
 
 miejsca = [
     ['A', [
