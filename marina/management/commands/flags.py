@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 __author__ = 'beret'
 
@@ -280,6 +281,6 @@ def _gen_flags():
             f = open(_fn, 'r')
             fo = Flag(name=name, code=code)
             fo.save()
-            print fo
+            print fo.name
         except:
-            pass
+            print code

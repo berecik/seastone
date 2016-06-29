@@ -1,3 +1,4 @@
+#!/usr/bin/python
 # -*- coding: utf-8 -*-
 __author__ = 'beret'
 from marina.models import Pier, Place, Hub, Connector, Marina
@@ -11,11 +12,11 @@ class Command(BaseCommand):
     #     parser.add_argument('poll_id', nargs='+', type=int)
 
     def handle(self, *args, **options):
-        marina, created = Marina.objects.get_or_create(name="Marina Kamień Pomorski")
+        marina, created = Marina.objects.get_or_create(name=u"Marina Kamień Pomorski")
         if created:
             marina.save()
         _gen_marina(marina)
-        self.stdout.write(self.style.SUCCESS('Successfully created marina %s scheme' % marina.name))
+        self.stdout.write(self.style.SUCCESS(u'Successfully created marina %s scheme' % marina.name))
 
 miejsca = [
     ['A', [
