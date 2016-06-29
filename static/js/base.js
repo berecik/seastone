@@ -123,8 +123,8 @@ $(document).ready(function() {
     });
 });
 
-function create_stay(berth_id) {
-    $( "#berth_id" ).val(berth_id);
+function create_stay(place_id) {
+    $( "#place_id" ).val(place_id);
     $( "#ship_select" ).autocomplete({
         minLength: 0,
         source: ships,

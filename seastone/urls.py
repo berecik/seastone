@@ -27,12 +27,12 @@ import marina.views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-    url(r'^$', marina.views.berths, name='berths'),
+    url(r'^$', marina.views.places, name='places'),
     url(r'^demo$', marina.views.map_demo, name='map-demo'),
     url(r'pier/add/$', marina.views.PierCreate.as_view(), name='pier-add'),
     url(r'pier/(?P<pk>[0-9]+)/$', marina.views.PierUpdate.as_view(), name='pier-update'),
     url(r'pier/(?P<pk>[0-9]+)/delete/$', marina.views.PierDelete.as_view(), name='pier-delete'),
-    url(r'berth/add/$', marina.views.BerthCreate.as_view(), name='berth-add'),
-    url(r'berth/(?P<pk>[0-9]+)/$', marina.views.BerthUpdate.as_view(), name='berth-update'),
-    url(r'berth/(?P<pk>[0-9]+)/delete/$', marina.views.BerthDelete.as_view(), name='berth-delete'),
+    url(r'place/add/$', marina.views.PlaceCreate.as_view(), name='place-add'),
+    url(r'place/(?P<pk>[0-9]+)/$', marina.views.PlaceUpdate.as_view(), name='place-update'),
+    url(r'place/(?P<pk>[0-9]+)/delete/$', marina.views.PlaceDelete.as_view(), name='place-delete'),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

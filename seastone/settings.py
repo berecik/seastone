@@ -24,7 +24,6 @@ SECRET_KEY = '2qh0vq&x#8pidvn5ni_2z+-!w*9c^e-@e6j_dtbfn3@ud5#tax'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-
 ALLOWED_HOSTS = []
 
 
@@ -45,11 +44,14 @@ INSTALLED_APPS = [
     'debug_toolbar',
     # rest framework
     'rest_framework',
+    'crispy_forms',
     # for a social login
     'social.apps.django_app.default',
     # custom applications
     'marina',
 ]
+
+CRISPY_TEMPLATE_PACK = "bootstrap3"
 
 MIDDLEWARE_CLASSES = [
     'django.middleware.security.SecurityMiddleware',

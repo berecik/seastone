@@ -2,7 +2,7 @@ from django.contrib import admin
 
 
 from django.contrib import admin
-from .models import Marina, Berth, Contract, Leave, Pier, Ship, Stay, Hub, Flag, Connection, Connector
+from .models import Marina, Place, Contract, Leave, Pier, Ship, Stay, Hub, Flag, Connection, Connector
 
 
 class MarinaAdmin(admin.ModelAdmin):
@@ -13,12 +13,12 @@ class MarinaAdmin(admin.ModelAdmin):
 admin.site.register(Marina, MarinaAdmin)
 
 
-class BerthAdmin(admin.ModelAdmin):
+class PlaceAdmin(admin.ModelAdmin):
     pass
     list_display = ('name', 'pier', 'order')
     list_display_links = ('name',)
 
-admin.site.register(Berth, BerthAdmin)
+admin.site.register(Place, PlaceAdmin)
 
 
 class ContractAdmin(admin.ModelAdmin):

@@ -34,13 +34,16 @@ class Pier(models.Model):
         ordering = ['order', 'id']
 
 
-class Berth(models.Model):
+class Place(models.Model):
     pier = models.ForeignKey(Pier)
     name = models.CharField(max_length=1024, db_index=True)
     min_length = models.DecimalField(max_digits=6, decimal_places=2)
     max_length = models.DecimalField(max_digits=6, decimal_places=2)
     order = models.IntegerField(default=0)
     # loc = models.TextField()
+
+    def state(self):
+        return 'free'
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.pier), self.name)
@@ -82,23 +85,23 @@ class Ship(models.Model):
 
 
 class Stay(models.Model):
-    berth = models.ForeignKey(Berth)
+    place = models.ForeignKey(Place)
     ship = models.ForeignKey(Ship, null=True)
     date_start = models.DateField(null=True, blank=True)
     date_end = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s: %s %s-%s" % (unicode(self.berth), unicode(self.ship), unicode(self.date_start), unicode(self.date_end))
+        return "%s: %s %s-%s" % (unicode(self.place), unicode(self.ship), unicode(self.date_start), unicode(self.date_end))
 
 
 class Contract(models.Model):
-    berth = models.ForeignKey(Berth)
+    place = models.ForeignKey(Place)
     ship = models.ForeignKey(Ship)
     date_start = models.DateField(null=True, blank=True)
     date_end = models.DateField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s %s" % (unicode(self.ship.name), unicode(self.berth.name))
+        return "%s %s" % (unicode(self.ship.name), unicode(self.place.name))
 
 
 class Leave(models.Model):
@@ -120,7 +123,7 @@ class Connector(models.Model):
 
 class Connection(models.Model):
     connector = models.ForeignKey(Connector)
-    berth = models.ForeignKey(Berth)
+    place = models.ForeignKey(Place)
     ship = models.ForeignKey(Ship)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField(null=True, blank=True)
@@ -128,7 +131,7 @@ class Connection(models.Model):
     counter_end = models.IntegerField(null=True, blank=True)
 
     def __unicode__(self):
-        return "%s %s" % (unicode(self.connector), unicode(self.berth))
+        return "%s %s" % (unicode(self.connector), unicode(self.place))
 
 
 

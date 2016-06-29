@@ -8,44 +8,44 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 # from marina.management.commands.miejsca import _gen_marina
 from tools import pl_to_py_date
-from .models import Stay, Ship, Pier, Berth, Flag, Marina, Hub, Connector
+from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector
 
 
 class PierCreate(CreateView):
     model = Pier
     fields = ['name']
-    success_url = reverse_lazy('berths')
+    success_url = reverse_lazy('places')
 
 
 class PierUpdate(UpdateView):
     model = Pier
     fields = ['name']
-    success_url = reverse_lazy('berths')
+    success_url = reverse_lazy('places')
 
 
 class PierDelete(DeleteView):
     model = Pier
-    success_url = reverse_lazy('berths')
+    success_url = reverse_lazy('places')
 
 
-class BerthCreate(CreateView):
-    model = Berth
+class PlaceCreate(CreateView):
+    model = Place
     fields = ['name']
-    success_url = reverse_lazy('berths')
+    success_url = reverse_lazy('places')
 
 
-class BerthUpdate(UpdateView):
-    model = Berth
+class PlaceUpdate(UpdateView):
+    model = Place
     fields = ['name']
-    success_url = reverse_lazy('berths')
+    success_url = reverse_lazy('places')
 
 
-class BerthDelete(DeleteView):
-    model = Berth
-    success_url = reverse_lazy('berths')
+class PlaceDelete(DeleteView):
+    model = Place
+    success_url = reverse_lazy('places')
 
 
-def berths(request):
+def places(request):
     _template = "chart_ui.html"
     piers = []
     marina = Marina.objects.all()[0]
@@ -80,7 +80,7 @@ def berths(request):
                 _id = int(_id)
                 pier = Pier.objects.get(pk=_pier_id)
                 if _type == 'mooring':
-                    _obj = Berth.objects.get(pk=_id)
+                    _obj = Place.objects.get(pk=_id)
                 elif _type == 'hub':
                     _obj = Hub.objects.get(pk=_id)
                 _obj.order = _order
@@ -88,8 +88,8 @@ def berths(request):
             except:
                 continue
 
-    berth_id = request.POST.get('berth_id')
-    if berth_id:
+    place_id = request.POST.get('place_id')
+    if place_id:
         # try:
         ship_name = request.POST.get('ship_name')
         ship_id = request.POST.get('ship_id')
@@ -103,8 +103,8 @@ def berths(request):
             ship.save()
         else:
             ship = Ship.objects.get(pk=int(ship_id))
-        berth = Berth.objects.get(pk=int(berth_id))
-        stay = Stay(berth=berth, ship=ship, date_start=pl_to_py_date(date_start), date_end=pl_to_py_date(date_end))
+        place = Place.objects.get(pk=int(place_id))
+        stay = Stay(place=place, ship=ship, date_start=pl_to_py_date(date_start), date_end=pl_to_py_date(date_end))
         stay.save()
 
 
@@ -124,7 +124,7 @@ def berths(request):
         max_length = int(request.POST.get('max_length', 20))
         new_mooring_pier_id = int(request.POST.get('new_mooring_pier'))
         new_mooring_pier = Pier.objects.get(id=new_mooring_pier_id)
-        new_mooring = Berth(name=new_mooring_name, min_length=min_length, max_length=max_length, pier=new_mooring_pier)
+        new_mooring = Place(name=new_mooring_name, min_length=min_length, max_length=max_length, pier=new_mooring_pier)
         new_mooring.save()
         # except:
         #     pass
@@ -142,14 +142,14 @@ def berths(request):
 
     for pier in Pier.objects.filter(marina=marina):
         _moorings = []
-        berths = Berth.objects.filter(pier=pier)
-        _len = len(berths)
+        places = Place.objects.filter(pier=pier)
+        _len = len(places)
         if pier.left_site and pier.right_site:
             _len = int(_len/2)+(_len%2)
         pier.len = _len
-        for mooring in Berth.objects.filter(pier=pier):
+        for mooring in Place.objects.filter(pier=pier):
             mooring.type = "mooring"
-            stays = Stay.objects.filter(berth=mooring)
+            stays = Stay.objects.filter(place=mooring)
             if stays:
                 mooring.ship = stays[0].ship
             _moorings.append((mooring.order, mooring))

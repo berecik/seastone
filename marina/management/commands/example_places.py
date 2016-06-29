@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 __author__ = 'beret'
-from marina.models import Pier, Berth, Hub, Connector, Marina
+from marina.models import Pier, Place, Hub, Connector, Marina
 from django.core.management.base import BaseCommand, CommandError
 
 
@@ -78,7 +78,7 @@ def _gen_marina(marina):
 
     _del_all(Connector)
     _del_all(Hub)
-    _del_all(Berth)
+    _del_all(Place)
     _del_all(Pier)
 
     for pirs, details in miejsca:
@@ -105,12 +105,12 @@ def _gen_marina(marina):
         row = ""
         if li > le:
             row += "\t%s%s" % (pirs, li)
-            bo = Berth(pier=po, name="%s%s" % (pirs, li), min_length=0, max_length=20, order=order)
+            bo = Place(pier=po, name="%s%s" % (pirs, li), min_length=0, max_length=20, order=order)
             bo.save()
             order += 1
         if ri < re:
             row += "\t%s%s" % (pirs, ri)
-            bo = Berth(pier=po, name="%s%s" % (pirs, ri), min_length=0, max_length=20, order=order)
+            bo = Place(pier=po, name="%s%s" % (pirs, ri), min_length=0, max_length=20, order=order)
             bo.save()
             order += 1
         print row
@@ -129,13 +129,13 @@ def _gen_marina(marina):
             if li > le:
                 li -= 1
                 row += "\t%s%s" % (pirs, li)
-                bo = Berth(pier=po, name="%s%s" % (pirs, li), min_length=0, max_length=20, order=order)
+                bo = Place(pier=po, name="%s%s" % (pirs, li), min_length=0, max_length=20, order=order)
                 bo.save()
                 order += 1
             if ri < re:
                 ri += 1
                 row += "\t%s%s" % (pirs, ri)
-                bo = Berth(pier=po, name="%s%s" % (pirs, ri), min_length=0, max_length=20, order=order)
+                bo = Place(pier=po, name="%s%s" % (pirs, ri), min_length=0, max_length=20, order=order)
                 bo.save()
                 order += 1
             print row
