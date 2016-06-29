@@ -24,10 +24,13 @@
     <script>
         hubs = {};
         places = {};
+        piers = {};
+        map = null;
+
         $(document).ready(function() {
             var _height = $(window).height()-50;
             $('#mapid').css('height', _height);
-            var map = L.map('mapid', {
+            map = L.map('mapid', {
                 {#                crs: L.CRS.Simple#}
             }).setView([53.9747, 14.769], 18);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYmVyZXQiLCJhIjoiY2lwM3I3NHVzMDAxendibHlybTNvbWZ5eSJ9.QeqzTkthT-iHFe6z9WZiuA', {
@@ -66,14 +69,17 @@
                 var _ymi = (_yp*_fmi)*-1;
                 var _im = 0;
                 var _li = 0;
-
-                L.polygon([
-                    [_xb+_ypm, _yb+_xpm],
-                    [_xe+_ypm, _ye+_xpm],
-                    [_xe-_ypm, _ye-_xpm],
-                    [_xb-_ypm, _yb-_xpm]
-                ]).addTo(map);
-
+                var pier = {
+                    icon: L.polygon([
+                    [_xb + _ypm, _yb + _xpm],
+                    [_xe + _ypm, _ye + _xpm],
+                    [_xe - _ypm, _ye - _xpm],
+                    [_xb - _ypm, _yb - _xpm]
+                    ]),
+                    places: {},
+                    hubs: {}
+                };
+                piers[{{ pier.id }}] = pier;
                 var place;
                 var hub;
 
@@ -83,32 +89,45 @@
                     {% if mooring.type == "mooring" %}
                         {% if pier.left_site %}
                             {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
-                                place = L.polygon([
+                                place = {
+                                    boat: L.polygon([
                                     [_xb-(_xpn*(_li*6+1))-_ymi, _yb-(_ypn*(_li*6+1))-_xmi],
                                     [_xb-(_xpn*(_li*6+3))-_ymj, _yb-(_ypn*(_li*6+3))-_xmj],
                                     [_xb-(_xpn*(_li*6+5))-_ymi, _yb-(_ypn*(_li*6+5))-_xmi]
-                                ]).addTo(map);
+                                ]),
+                                connector: L.circle([_xb-(_xpn*(_li*6+3))-_ymi, _yb-(_ypn*(_li*6+3))-_xmi], 0.5),
+                                connection: [_xb-(_xpn*(_li*6+3))-_ymi, _yb-(_ypn*(_li*6+3))-_xmi]
+                            };
                             {% if pier.right_site %}}{% endif %}
                         {% endif %}
                         {% if pier.right_site %}
-                            {% if pier.left_site %}if(_im%2==1){ _li = (_im-1)/2; {% else %} _li = _im;{% endif %}
-                                place = L.polygon([
-                                    [_xb-(_xpn*(_li*6+1))+_ymi, _yb-(_ypn*(_li*6+1))+_xmi],
-                                    [_xb-(_xpn*(_li*6+3))+_ymj, _yb-(_ypn*(_li*6+3))+_xmj],
-                                    [_xb-(_xpn*(_li*6+5))+_ymi, _yb-(_ypn*(_li*6+5))+_xmi]
-                                ]).addTo(map);
+                            {% if pier.left_site %}if(_im%2==1){ _li = (_im - 1) / 2; {% else %} _li = _im;{% endif %}
+                            place ={
+                                    icon: L.polygon([
+                                        [_xb - (_xpn * (_li * 6 + 1)) + _ymi, _yb - (_ypn * (_li * 6 + 1)) + _xmi],
+                                        [_xb - (_xpn * (_li * 6 + 3)) + _ymj, _yb - (_ypn * (_li * 6 + 3)) + _xmj],
+                                        [_xb - (_xpn * (_li * 6 + 5)) + _ymi, _yb - (_ypn * (_li * 6 + 5)) + _xmi]
+                                    ]),
+                                    connector: L.circle([_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi], 0.5),
+                                    connection: [_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi]
+                            };
                             {% if pier.left_site %}}{% endif %}
                         {% endif %}
                         _im++;
-                        if(place){
-                            place.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
+                        if(place && place.icon){
+                            place.icon.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
                             places[{{ mooring.id }}] = place;
+                            pier.places[{{ mooring.id }}] = place;
                         }
                     {% endif %}
                     {% if mooring.type == "hub" %}
-                        hub = L.circle([_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))], 1).addTo(map);
-                        hub.bindPopup("<b>{{ mooring }}</b>");
+                        hub = {
+                            icon: L.circle([_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))], 1),
+                            connection: [_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))]
+                        };
+                        hub.icon.bindPopup("<b>{{ mooring }}</b>");
                         hubs[{{ mooring.id }}] = hub;
+                        pier.hubs[{{ mooring.id }}] = hub;
                     {% endif %}
                 {% endfor %}
             {% endfor %}
