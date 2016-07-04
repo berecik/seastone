@@ -1,8 +1,11 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+import json
+
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
+from django.http import JsonResponse
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # from .flagi import _gen_flags
 
@@ -46,6 +49,7 @@ class PlaceDelete(DeleteView):
 
 
 def places(request):
+
     _template = "chart_ui.html"
     piers = []
     marina = Marina.objects.all()[0]

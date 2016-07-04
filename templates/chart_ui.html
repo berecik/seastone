@@ -9,7 +9,7 @@
         #mapid { height: 800px; }
     </style>
     <script>
-            var ships = [
+        var ships = [
             {% for ship in ships %}
                 {
                     value: '{{ ship.id }}',
@@ -26,6 +26,42 @@
         places = {};
         piers = {};
         map = null;
+
+        function _places(places, action){
+            return function(){
+                $.each(places, function (id) {
+                    action(places[id]);
+                });
+            }
+        }
+
+        function _draw(item, color){
+            if(!color){
+                color = 'red';
+            }
+            item.icon.setStyle({
+                color: color,
+                fillColor: color,
+                fillOpacity: 1
+            });
+            item.icon.addTo(map);
+        }
+
+        function _draw_place(item, color){
+            if(!color){
+                color = 'red';
+            }
+            item.icon.setStyle({
+                color: color,
+                fillColor: color
+            });
+            item.icon.addTo(map);
+            item.connector.addTo(map);
+        }
+
+        draw_hubs = _places(hubs, function(item){_draw(item, 'red');});
+        draw_places = _places(places, function(item){_draw(item, 'green');});
+
 
         $(document).ready(function() {
             var _height = $(window).height()-50;
@@ -71,10 +107,10 @@
                 var _li = 0;
                 var pier = {
                     icon: L.polygon([
-                    [_xb + _ypm, _yb + _xpm],
-                    [_xe + _ypm, _ye + _xpm],
-                    [_xe - _ypm, _ye - _xpm],
-                    [_xb - _ypm, _yb - _xpm]
+                        [_xb + _ypm, _yb + _xpm],
+                        [_xe + _ypm, _ye + _xpm],
+                        [_xe - _ypm, _ye - _xpm],
+                        [_xb - _ypm, _yb - _xpm]
                     ]),
                     places: {},
                     hubs: {}
@@ -86,11 +122,18 @@
                 {% for mooring in moorings %}
                     place = null;
                     hub = null;
+                    _set_place = function(place){
+                        if(place && place.icon){
+                            place.icon.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
+                            places[{{ mooring.id }}] = place;
+                            pier.places[{{ mooring.id }}] = place;
+                        }
+                    };
                     {% if mooring.type == "mooring" %}
                         {% if pier.left_site %}
                             {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
-                                place = {
-                                    boat: L.polygon([
+                            place = {
+                                icon: L.polygon([
                                     [_xb-(_xpn*(_li*6+1))-_ymi, _yb-(_ypn*(_li*6+1))-_xmi],
                                     [_xb-(_xpn*(_li*6+3))-_ymj, _yb-(_ypn*(_li*6+3))-_xmj],
                                     [_xb-(_xpn*(_li*6+5))-_ymi, _yb-(_ypn*(_li*6+5))-_xmi]
@@ -103,22 +146,18 @@
                         {% if pier.right_site %}
                             {% if pier.left_site %}if(_im%2==1){ _li = (_im - 1) / 2; {% else %} _li = _im;{% endif %}
                             place ={
-                                    icon: L.polygon([
-                                        [_xb - (_xpn * (_li * 6 + 1)) + _ymi, _yb - (_ypn * (_li * 6 + 1)) + _xmi],
-                                        [_xb - (_xpn * (_li * 6 + 3)) + _ymj, _yb - (_ypn * (_li * 6 + 3)) + _xmj],
-                                        [_xb - (_xpn * (_li * 6 + 5)) + _ymi, _yb - (_ypn * (_li * 6 + 5)) + _xmi]
-                                    ]),
-                                    connector: L.circle([_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi], 0.5),
-                                    connection: [_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi]
+                                icon: L.polygon([
+                                    [_xb - (_xpn * (_li * 6 + 1)) + _ymi, _yb - (_ypn * (_li * 6 + 1)) + _xmi],
+                                    [_xb - (_xpn * (_li * 6 + 3)) + _ymj, _yb - (_ypn * (_li * 6 + 3)) + _xmj],
+                                    [_xb - (_xpn * (_li * 6 + 5)) + _ymi, _yb - (_ypn * (_li * 6 + 5)) + _xmi]
+                                ]),
+                                connector: L.circle([_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi], 0.5),
+                                connection: [_xb - (_xpn * (_li * 6 + 3)) + _ymi, _yb - (_ypn * (_li * 6 + 3)) + _xmi]
                             };
                             {% if pier.left_site %}}{% endif %}
                         {% endif %}
                         _im++;
-                        if(place && place.icon){
-                            place.icon.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
-                            places[{{ mooring.id }}] = place;
-                            pier.places[{{ mooring.id }}] = place;
-                        }
+                        _set_place(place);
                     {% endif %}
                     {% if mooring.type == "hub" %}
                         hub = {
@@ -131,11 +170,14 @@
                     {% endif %}
                 {% endfor %}
             {% endfor %}
+            draw_places();
+            draw_hubs();
         });
+
     </script>
 {% endblock scripts %}
 {% block content %}
-        <div id="add_stay_form" title="Dodaj postój" class="container">
+    <div id="add_stay_form" title="Dodaj postój" class="container">
         <form method="post">
             <fieldset>
                 <div class="row">
@@ -176,6 +218,26 @@
                     <input type="submit" value="Dodaj postój">
                 </div>
                 {% csrf_token %}
+            </fieldset>
+        </form>
+    </div>
+    <div id="date_form" class="container">
+        <form class="serialise_form">
+            <fieldset>
+                <div class="row">
+                    <label for="date_start" class="">Data Od</label>
+                    <input type="text" class="date date_now serial" name="date_start">
+                    <label for="date_end" class="">Data Do</label>
+                    <input type="text" class="date date_now serial" name="date_end">
+                    <label for="show_hubs" class="">Postumenty</label>
+                    <input type="checkbox" name="show_hubs" checked class="serial">
+                    <label for="show_free" class="">Wolne</label>
+                    <input type="checkbox" name="show_free" checked class="serial">
+                    <label for="show_booked" class="">Zajete</label>
+                    <input type="checkbox" name="show_booked" checked class="serial">
+                    <label for="show_residents" class="">Rezydenci</label>
+                    <input type="checkbox" name="show_residents" checked class="serial">
+                </div>
             </fieldset>
         </form>
     </div>

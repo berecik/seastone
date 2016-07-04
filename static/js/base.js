@@ -105,7 +105,10 @@ $(document).ready(function() {
             }
         })
         .disableSelection();
-    $( ".date" ).datepicker($.datepicker.regional[ "pl" ]);
+    $( ".date" ).datepicker($.datepicker.regional[ "pl" ],{
+        defaultDate: 0
+    });
+    $( ".date_now" ).datepicker('setDate', Date.now());
     dialog = $( "#add_stay_form" ).dialog({
         autoOpen: false,
         height: 300,
