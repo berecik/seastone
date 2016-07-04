@@ -142,3 +142,13 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
     os.path.join(BASE_DIR, "static"),
 ]
+
+try:
+    from _local_settings import *
+except ImportError as e:
+    pass
+
+try:
+    from common_settings import *
+except ImportError as e:
+    pass

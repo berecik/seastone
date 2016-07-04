@@ -75,7 +75,7 @@
                 id: 'mapbox.streets'
             }).addTo(map);
 
-            {% for pier, moorings in piers %}
+            {% for pier, items in piers %}
                 var _xb = {{ pier.loc_start_x }};
                 var _xe = {{ pier.loc_end_x }};
                 var _yb = {{ pier.loc_start_y }};
@@ -119,17 +119,17 @@
                 var place;
                 var hub;
 
-                {% for mooring in moorings %}
+                {% for item in items %}
                     place = null;
                     hub = null;
                     _set_place = function(place){
                         if(place && place.icon){
-                            place.icon.bindPopup("<div class=\"mooring {% if action == 'edit' %}mooring_sort{% endif %}\"><input class=\"mooring_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ mooring.type }}__{{ mooring.id }}\"><div class=\"well row\"><div >{% if mooring.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ mooring.name }}: ({{ mooring.min_length }}m.&nbsp;-&nbsp;{{ mooring.max_length }}m.)</div><div>{% if mooring.ship %}{{ mooring.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ mooring.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
-                            places[{{ mooring.id }}] = place;
-                            pier.places[{{ mooring.id }}] = place;
+                            place.icon.bindPopup("<div class=\"place {% if action == 'edit' %}place_sort{% endif %}\"><input class=\"place_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ item.type }}__{{ item.id }}\"><div class=\"well row\"><div >{% if item.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ item.name }}: ({{ item.min_length }}m.&nbsp;-&nbsp;{{ item.max_length }}m.)</div><div>{% if item.ship %}{{ item.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ item.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
+                            places[{{ item.id }}] = place;
+                            pier.places[{{ item.id }}] = place;
                         }
                     };
-                    {% if mooring.type == "mooring" %}
+                    {% if item.type == "place" %}
                         {% if pier.left_site %}
                             {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
                             place = {
@@ -159,14 +159,14 @@
                         _im++;
                         _set_place(place);
                     {% endif %}
-                    {% if mooring.type == "hub" %}
+                    {% if item.type == "hub" %}
                         hub = {
                             icon: L.circle([_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))], 1),
                             connection: [_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))]
                         };
-                        hub.icon.bindPopup("<b>{{ mooring }}</b>");
-                        hubs[{{ mooring.id }}] = hub;
-                        pier.hubs[{{ mooring.id }}] = hub;
+                        hub.icon.bindPopup("<b>{{ item }}</b>");
+                        hubs[{{ item.id }}] = hub;
+                        pier.hubs[{{ item.id }}] = hub;
                     {% endif %}
                 {% endfor %}
             {% endfor %}

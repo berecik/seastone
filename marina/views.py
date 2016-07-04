@@ -48,6 +48,24 @@ class PlaceDelete(DeleteView):
     success_url = reverse_lazy('places')
 
 
+def _get_marina(request):
+    marina, created = Marina.objects.get_or_create(name=u"Marina Kamień Pomorski")
+    return marina
+
+
+def _get_range(request):
+    "&date_start=2016-7-4&date_end=2016-7-4"
+    pass
+
+
+def free_places(request):
+    marina = _get_marina(request)
+    for pier in Pier.objects.filter(marina=marina):
+        places = Place.objects.filter(pier=pier)
+        for place in places:
+            stays = Stay.objects.filter(place=place)
+
+
 def places(request):
 
     _template = "chart_ui.html"
@@ -145,25 +163,25 @@ def places(request):
         #     pass
 
     for pier in Pier.objects.filter(marina=marina):
-        _moorings = []
+        _items = []
         places = Place.objects.filter(pier=pier)
         _len = len(places)
         if pier.left_site and pier.right_site:
             _len = int(_len/2)+(_len%2)
         pier.len = _len
-        for mooring in Place.objects.filter(pier=pier):
-            mooring.type = "mooring"
-            stays = Stay.objects.filter(place=mooring)
+        for place in Place.objects.filter(pier=pier):
+            place.type = "place"
+            stays = Stay.objects.filter(place=place)
             if stays:
-                mooring.ship = stays[0].ship
-            _moorings.append((mooring.order, mooring))
+                place.ship = stays[0].ship
+            _items.append((place.order, place))
         for hub in Hub.objects.filter(pier=pier):
             hub.type = "hub"
             hub.connectors = Connector.objects.filter(hub=hub)
             for connector in hub.connectors:
                 connector.counter = 4
-            _moorings.append((hub.order, hub))
-        piers.append([pier, map(lambda x: x[1], sorted(_moorings))])
+            _items.append((hub.order, hub))
+        piers.append([pier, map(lambda x: x[1], sorted(_items))])
         # column_size = max(2, int(12/(len(piers)+1)))
 
     ships = Ship.objects.all()

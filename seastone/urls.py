@@ -16,7 +16,7 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
-from django.conf.urls import url
+from django.conf.urls import patterns, include, url
 from django.contrib import admin
 
 from django.conf import settings
@@ -35,4 +35,5 @@ urlpatterns = [
     url(r'place/add/$', marina.views.PlaceCreate.as_view(), name='place-add'),
     url(r'place/(?P<pk>[0-9]+)/$', marina.views.PlaceUpdate.as_view(), name='place-update'),
     url(r'place/(?P<pk>[0-9]+)/delete/$', marina.views.PlaceDelete.as_view(), name='place-delete'),
+    url(r'^utils/', include("utils.urls"), ),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
