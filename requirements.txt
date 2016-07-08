@@ -35,7 +35,7 @@ pytz
 pycurl
 
 #form helper
-crispy_forms
+django-crispy-forms
 
 
 # Social login, so the fun just will begin
