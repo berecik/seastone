@@ -82,6 +82,7 @@ class Command(BaseCommand):
 def _gen_ships():
 
     for ship_dict in ships_examples:
+        print ship_dict
         ship_dict["flag"] = Flag.objects.get(code=ship_dict["flag"])
         ship, created = Ship.objects.get_or_create(**ship_dict)
         if created:
