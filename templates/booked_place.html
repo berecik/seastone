@@ -1,0 +1,17 @@
+{% extends 'place_state.html' %}
+{% block script %}
+{% for stay in ships %}
+    $("#remove_stay_{{ stay.pk }}").click(set_action.bind(null, {{ place_id }}, "remove_stay", {{ stay.pk }}));
+{% endfor %}
+{% endblock script %}
+{% block form %}
+<ul>
+{% for stay in ships %}
+   <li>{{ stay.ship }}: od {{ stay.date_start }} do {{ stay.date_end }}
+       <button id="remove_stay_{{ stay.pk }}">Usuń</button>
+    </li>
+{% endfor %}
+</ul>
+{% endblock form %}
+{% block submit %}
+{% endblock submit %}

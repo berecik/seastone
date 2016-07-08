@@ -1,0 +1,29 @@
+<textarea id="_call_{{ hub_id }}" >
+    var hub_id = {{ hub_id }};
+    $("#close_"+hub_id).click(set_action.bind(null, {{ hub_id }}, "close_popup", null));
+    {% block script %}
+    {% endblock script %}
+</textarea>
+<div id="title_{{ hub_id }}" class="row">
+    <b class="pull-left">{{ hub.pier.name }} Postument {{ hub.name }}</b>
+</div>
+<hr>
+<div id="hub_{{ hub_id }}">
+    {% block form %}
+    <ul>
+        {% for connector in hub.connectors %}
+            <li class="row">
+                <div class="col-sm-5"><button>Podłącz jacht</button></div><div class="col-sm-2">{{ connector.name }}</div><div class="col-sm-5"><button>Spisz stan</button> Licznik: {{ connector.counter }}</div>
+            </li>
+        {% endfor %}
+        </ul>
+    {% endblock form%}
+    <fieldset>
+        {% block buttons %}
+            {% block submit %}
+                <button id="submit_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz{% endblock submit_text %}</button>
+            {% endblock submit %}
+            <button id="close_{{ hub_id }}" class="pull-right">Zamknij</button>
+        {% endblock buttons %}
+    </fieldset>
+</div>

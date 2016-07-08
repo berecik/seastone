@@ -7,5 +7,5 @@ from .views import settings_js
 
 urlpatterns = patterns('',
     # javascript settings
-    url(r'settings\.js', 'utils.views.settings_js', name='js_settings'),
+    url(r'settings\.js', settings_js, name='js_settings'),
 )

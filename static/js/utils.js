@@ -159,7 +159,8 @@ function get_url(page, action){
     }else{
         action = '';
     }
-    return page + "?" + serialize();
+    var url =  page + "?" + action + serialize();
+    return url
 }
 
 
@@ -169,7 +170,6 @@ function goto(page, action) {
 }
 
 function datepicker_value(input, value){
-    console.log(input);
     var date = input.datepicker('getDate');
     return date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate();
 }

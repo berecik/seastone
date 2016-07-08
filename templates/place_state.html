@@ -1,0 +1,24 @@
+<textarea id="_call_{{ place_id }}" >
+    var place_id = {{ place_id }};
+    $("#close_"+place_id).click(set_action.bind(null, {{ place_id }}, "close_popup", null));
+    $("#edit_"+place_id).click(set_action.bind(null, {{ place_id }}, "edit_place", null));
+    {% block script %}
+    {% endblock script %}
+</textarea>
+<div id="title_{{ place_id }}" class="row">
+    <b class="pull-left">{{ place.pier.name }} Miejsce {{ place.name }} ({{ place.min_length }}-{{ place.max_length }} m.)</b>
+    {% block edit_button %}<button id="edit_{{ place_id }}" class="pull-right">Edytuj miejsce</button>{% endblock edit_button %}
+</div>
+<hr>
+<div id="add_stay_{{ place_id }}" title="Dodaj postój">
+    {% block form %}
+    {% endblock form%}
+    <fieldset>
+        {% block buttons %}
+        {% block submit %}
+            <button id="submit_{{ place_id }}" class="pull-left">{% block submit_text %}Zapisz{% endblock submit_text %}</button>
+        {% endblock submit %}
+        <button id="close_{{ place_id }}" class="pull-right">Zamknij</button>
+        {% endblock buttons %}
+    </fieldset>
+</div>

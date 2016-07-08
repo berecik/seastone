@@ -2,16 +2,19 @@
 # -*- coding: utf-8 -*-
 
 import json
+from datetime import date
 
 from django.core.urlresolvers import reverse_lazy
 from django.shortcuts import render
-from django.http import JsonResponse
+
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 # from .flagi import _gen_flags
+from utils.tools import iso_to_py_date, py_to_iso_date, iso2js
+from utils.decorators import parse_args, json_response, check_action, template_response
 
-# from marina.management.commands.miejsca import _gen_marina
 from tools import pl_to_py_date
-from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector
+from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector, Contract, Leave
+from .data import get_places, get_ships
 
 
 class PierCreate(CreateView):
@@ -48,29 +51,180 @@ class PlaceDelete(DeleteView):
     success_url = reverse_lazy('places')
 
 
-def _get_marina(request):
+def _get_marina(*args, **kwargs):
     marina, created = Marina.objects.get_or_create(name=u"Marina Kamień Pomorski")
-    return marina
+    _marina_dict = {
+        "marina": marina,
+    }
+    return _marina_dict
 
 
-def _get_range(request):
+def _get_range(request, *args, **kwargs):
     "&date_start=2016-7-4&date_end=2016-7-4"
-    pass
+    date_start_txt = getattr(request.GET, 'date_start', None)
+    if date_start_txt:
+        date_start = iso_to_py_date(date_start_txt)
+    else:
+        date_start = date.today()
+
+    date_end_txt = getattr(request.GET, 'date_end', None)
+    if date_end_txt:
+        date_end = iso_to_py_date(date_end_txt)
+    else:
+        date_end = date.today()
+
+    _range = {
+        "date_start": date_start,
+        "date_end": date_end
+    }
+    return _range
 
 
-def free_places(request):
-    marina = _get_marina(request)
-    for pier in Pier.objects.filter(marina=marina):
-        places = Place.objects.filter(pier=pier)
-        for place in places:
-            stays = Stay.objects.filter(place=place)
+def close_popup(request, _id=None, **kwargs):
+    place_id = _id
+    _context = {
+        "place_id": place_id
+    }
+    return render(request, "close_popup.html", _context)
 
 
-def places(request):
+def resident_place(request, date_start, date_end,  place, **kwargs):
+    place_id = place.id
+    ships = place.ships(date_start, date_end)
+    residents = place.resident(date_start, date_end)
+    _context = {
+        "place_id": place_id,
+        "place": place,
+        "ships": ships,
+        "residents": residents
+    }
+    return render(request, "resident_place.html", _context)
+
+
+def booked_place(request, date_start, date_end,  place, **kwargs):
+    place_id = place.id
+    ships = place.ships(date_start, date_end)
+    residents = place.resident(date_start, date_end)
+    _context = {
+        "place_id": place_id,
+        "place": place,
+        "ships": ships,
+        "residents": residents
+    }
+    return render(request, "booked_place.html", _context)
+
+
+def free_place(request, date_start, date_end, place=None, **kwargs):
+    place_id = request.POST.get('place_id')
+    if place_id:
+        # try:
+        ship_name = request.POST.get('ship_name')
+        ship_id = request.POST.get('ship_id')
+        length = request.POST.get('length')
+        flag_code = request.POST.get('flag')
+        # date_start = request.POST.get('date_start')
+        # date_end = request.POST.get('date_end')
+        flag = Flag.objects.get(code=flag_code)
+        if not ship_id:
+            ship = Ship(name=ship_name, length=int(length), flag=flag)
+            ship.save()
+        else:
+            ship = Ship.objects.get(pk=int(ship_id))
+        place = Place.objects.get(pk=int(place_id))
+        type = request.POST.get('type')
+        if type == "stay":
+            stay = Stay(place=place, ship=ship, date_start=date_start, date_end=date_end)
+            stay.save()
+        elif type == "resident":
+            contract = Contract(place=place, ship=ship, date_start=date_start)
+            contract.save()
+        return place_state(request, _id=place_id, **kwargs)
+    elif place:
+        place_id = place.pk
+    else:
+        return close_popup(request)
+
+    flags = Flag.objects.all()
+    _context = {
+        "place": place,
+        "flags": flags,
+        "place_id": place_id
+    }
+    return render(request, "free_place.html", _context)
+
+
+def edit_place(request, _id, **kwargs):
+    place_id = request.POST.get('edit_place_id')
+    if place_id:
+        min_length = request.POST.get('min_length')
+        max_length = request.POST.get('max_length')
+        name = request.POST.get('name')
+        place = Place.objects.get(pk=int(place_id))
+        place.min_length = min_length
+        place.max_length = max_length
+        place.name = name
+        place.save()
+        return place_state(request, _id=place_id, **kwargs)
+    elif _id:
+        place_id = _id
+        place = Place.objects.get(pk=int(place_id))
+    else:
+        return close_popup(request)
+
+    _context = {
+        "place": place,
+        "place_id": place_id,
+        "name": place.name,
+        "min_length": place.min_length,
+        "max_length": place.max_length
+    }
+    return render(request, "edit_place.html", _context)
+
+
+def remove_stay(request, _id, **kwargs):
+    stay = Stay.objects.get(pk=int(_id))
+    place_id = stay.place.pk
+    stay.delete()
+    return place_state(request, _id=place_id, **kwargs)
+
+
+def remove_contract(request, _id, **kwargs):
+    contract = Contract.objects.get(pk=int(_id))
+    place_id = contract.place.pk
+    contract.delete()
+    return place_state(request, _id=place_id, **kwargs)
+
+
+PLACE_STATE_ACTION = {
+    "resident": resident_place,
+    "free": free_place,
+    "booked": booked_place
+}
+
+@parse_args(_get_range)
+def place_state(request, date_start, date_end, _id, **kwargs):
+    place_id = int(_id)
+    place = Place.objects.get(pk=place_id)
+    state = place.state(date_start, date_end)
+    return PLACE_STATE_ACTION[state](request, date_start=date_start, date_end=date_end, place=place, **kwargs)
+
+
+PLACES_ACTIONS = (
+    ("get_places", get_places),
+    ("get_ships", get_ships),
+    ("place_state", place_state, None),
+    ("close_popup", close_popup, None),
+    ("edit_place", edit_place, None),
+    ("remove_stay", remove_stay, None),
+    ("remove_contract", remove_contract, None)
+)
+
+@parse_args(_get_range, _get_marina)
+@check_action(PLACES_ACTIONS, json_response())
+def places(request, date_start, date_end, marina, **kwargs):
 
     _template = "chart_ui.html"
     piers = []
-    marina = Marina.objects.all()[0]
 
     # if request.GET.get("gen_flags"):
     #     _gen_flags()
@@ -121,7 +275,7 @@ def places(request):
         date_end = request.POST.get('date_end')
         flag = Flag.objects.get(code=flag_code)
         if not ship_id:
-            ship = Ship(name=ship_name, length=int(length), flag=flag)
+            ship = Ship(name=ship_name, length=float(length), flag=flag)
             ship.save()
         else:
             ship = Ship.objects.get(pk=int(ship_id))
@@ -185,6 +339,7 @@ def places(request):
         # column_size = max(2, int(12/(len(piers)+1)))
 
     ships = Ship.objects.all()
+    flags = Flag.objects.all()
 
     context = {
         "title": unicode(marina),
@@ -192,6 +347,7 @@ def places(request):
         # "column_size": column_size,
         "edit": True,
         "ships": ships,
+        "flags": flags
     }
     return render(request, _template, context)
 

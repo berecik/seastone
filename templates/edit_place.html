@@ -1,0 +1,22 @@
+{% extends 'place_state.html' %}
+{% block edit_button %}{% endblock edit_button %}
+{% block script %}
+    edit_place({{ place_id }});
+{% endblock script %}
+{% block form %}
+    <form method="post" id="form_{{ place_id }}" onsubmit="return false;">
+        <fieldset>
+            {% csrf_token %}
+            <input type="hidden" name="edit_place_id" value="{{ place_id }}">
+            <label for="name" class="">Nazwa:</label>
+            <input type="text" name="name" id="name_{{ place_id }}" value="{{ name }}" class="text ui-widget-content ui-corner-all number">
+            <hr>
+            <label for="min_length" class="">Długość minimalna</label>
+            <input type="text" name="min_length" id="min_length_{{ place_id }}" value="{{ min_length }}" class="text ui-widget-content ui-corner-all number">
+            <hr>
+            <label for="max_length" class="">Długość maksymalna</label>
+            <input type="text" name="max_length" id="max_length_{{ place_id }}" value="{{ max_length }}" class="text ui-widget-content ui-corner-all number">
+        </fieldset>
+        <hr>
+    </form>
+{% endblock form %}

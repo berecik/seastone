@@ -1,0 +1,17 @@
+{% extends 'place_state.html' %}
+{% block script %}
+{% for resident, leaves in residents %}
+    $("#remove_contract_{{ resident.pk }}").click(set_action.bind(null, {{ place_id }}, "remove_contract", {{ resident.pk }}));
+{% endfor %}
+{% endblock script %}
+{% block form %}
+<ul>
+{% for resident, leaves in residents %}
+   <li>{{ resident.ship }}: od {{ resident.date_start }}{% if resident.date_end %} do {{ resident.date_end }}{% endif %}
+       <button id="remove_contract_{{ resident.pk }}">Usuń</button>
+    </li>
+{% endfor %}
+</ul>
+{% endblock form %}
+{% block submit %}
+{% endblock submit %}

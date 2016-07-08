@@ -28,6 +28,12 @@
             <link href="{% static 'jquery-ui/jquery-ui.css' %}" rel="stylesheet">
             <link href="{% static 'jquery-ui/jquery-ui.theme.css' %}" rel="stylesheet">
 
+            <style>
+                {% for flag in flags %}
+                    select#ship_flag option[value="{{ flag.code }}"]   { background-image:url(/static/flags/{{ flag.code }}.png);   }
+                {% endfor %}
+            </style>
+
         {% endblock style %}
         {% block scripts %}
             <script>

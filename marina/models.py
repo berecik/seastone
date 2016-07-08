@@ -1,6 +1,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from django.db.models import Q
 
 # Create your models here.
 # no problem dude, so let do a bert place model first
@@ -42,8 +43,45 @@ class Place(models.Model):
     order = models.IntegerField(default=0)
     # loc = models.TextField()
 
-    def state(self):
-        return 'free'
+    def state(self, date_start, date_end):
+
+        stays = Stay.objects.filter(place=self).filter(date_start__lte=date_end, date_end__gte=date_start)
+        contracts = Contract.objects.filter(place=self, date_start__lte=date_end)\
+            .filter(Q(date_end__gte=date_start) | Q(date_end__isnull=True))
+        leaves = Leave.objects.filter(contractor__place=self, date_start__lte=date_end, date_end__gte=date_start)
+
+        if contracts and not leaves:
+            return "resident"
+        elif not stays:
+            return "free"
+        else:
+            return "booked"
+
+    def ships(self, date_start, date_end):
+        ships = []
+
+        stays = Stay.objects.filter(place=self, date_start__lte=date_end, date_end__gte=date_start)
+
+        if stays:
+            for stay in stays:
+                ships.append(stay)
+        return ships
+
+    def resident(self, date_start, date_end):
+        residents = []
+
+        contracts = Contract.objects.filter(place=self, date_start__lte=date_end)\
+            .filter(Q(date_end__gte=date_start) | Q(date_end__isnull=True))
+
+        if contracts:
+            for contract in contracts:
+                leaves = Leave.objects.filter(contractor=contract, date_end__gte=date_start)
+                leaves_list = []
+                for leave in leaves:
+                    leaves_list.append(leave)
+                residents.append([contract, leaves])
+
+        return residents
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.pier), self.name)
@@ -106,8 +144,8 @@ class Contract(models.Model):
 
 class Leave(models.Model):
     contractor = models.ForeignKey(Contract)
-    date_start = models.DateTimeField()
-    date_end = models.DateTimeField()
+    date_start = models.DateField()
+    date_end = models.DateField()
 
     def __unicode__(self):
         return "%s: %s-%s" % (unicode(self.member), unicode(self.date_start), unicode(self.date_end))

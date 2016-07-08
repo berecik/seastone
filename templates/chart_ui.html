@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <script src="{% static 'js/places.js' %}"></script>
     <style>
         #mapid { height: 800px; }
     </style>
@@ -19,50 +20,13 @@
                     flag: '{{ship.flag.code}}'
                 },
             {% endfor %}
-        ]
+        ];
+{#        hubs = {};#}
+{#        places = {};#}
+{#        piers = {};#}
+{#        map = null;#}
     </script>
     <script>
-        hubs = {};
-        places = {};
-        piers = {};
-        map = null;
-
-        function _places(places, action){
-            return function(){
-                $.each(places, function (id) {
-                    action(places[id]);
-                });
-            }
-        }
-
-        function _draw(item, color){
-            if(!color){
-                color = 'red';
-            }
-            item.icon.setStyle({
-                color: color,
-                fillColor: color,
-                fillOpacity: 1
-            });
-            item.icon.addTo(map);
-        }
-
-        function _draw_place(item, color){
-            if(!color){
-                color = 'red';
-            }
-            item.icon.setStyle({
-                color: color,
-                fillColor: color
-            });
-            item.icon.addTo(map);
-            item.connector.addTo(map);
-        }
-
-        draw_hubs = _places(hubs, function(item){_draw(item, 'red');});
-        draw_places = _places(places, function(item){_draw(item, 'green');});
-
-
         $(document).ready(function() {
             var _height = $(window).height()-50;
             $('#mapid').css('height', _height);
@@ -124,7 +88,7 @@
                     hub = null;
                     _set_place = function(place){
                         if(place && place.icon){
-                            place.icon.bindPopup("<div class=\"place {% if action == 'edit' %}place_sort{% endif %}\"><input class=\"place_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ item.type }}__{{ item.id }}\"><div class=\"well row\"><div >{% if item.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ item.name }}: ({{ item.min_length }}m.&nbsp;-&nbsp;{{ item.max_length }}m.)</div><div>{% if item.ship %}{{ item.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ item.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");
+{#                            place.icon.bindPopup("<div class=\"place {% if action == 'edit' %}place_sort{% endif %}\"><input class=\"place_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ item.type }}__{{ item.id }}\"><div class=\"well row\"><div >{% if item.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ item.name }}: ({{ item.min_length }}m.&nbsp;-&nbsp;{{ item.max_length }}m.)</div><div>{% if item.ship %}{{ item.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ item.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");#}
                             places[{{ item.id }}] = place;
                             pier.places[{{ item.id }}] = place;
                         }
@@ -170,73 +134,32 @@
                     {% endif %}
                 {% endfor %}
             {% endfor %}
-            draw_places();
-            draw_hubs();
+            {#            draw_places();#}
+            {#            draw_hubs();#}
+            $(".refresh_change").change(refresh);
+            $(".refresh_click").click(refresh);
+            draw_all();
         });
 
     </script>
 {% endblock scripts %}
 {% block content %}
-    <div id="add_stay_form" title="Dodaj postój" class="container">
-        <form method="post">
-            <fieldset>
-                <div class="row">
-                    <input type="hidden" name="ship_id" id="ship_id" value="">
-                    <input type="hidden" name="place_id" id="place_id" value="">
-                    <label for="ship_name" class="">Jacht</label>
-                    <input type="text" name="ship_name" id="ship_select" value="" class="text ui-widget-content ui-corner-all">
-                    <select name="flag" id="ship_flag">
-                        <option>wybierz flagę...</option>
-                        <option value="pl">Polska</option>
-                        <option value="de">Niemcy</option>
-                        <option value="se">Szwecja</option>
-                        <option value="dk">Dania</option>
-                        <option value="nl">Holandia</option>
-                        <option value="no">Norwegia</option>
-                        <option value="fr">Francja</option>
-                        <option value="be">Belgia</option>
-                        <option value="fi">Finlandia</option>
-                        <option value="cz">Czechy</option>
-                        <option value="gb">Wielka Brytania</option>
-                        <option value="us">USA</option>
-                    </select>
-                    <img id="ship_flag_img" src="" class="ui-state-default" alt="">
-                    <label for="length" class="">Długość</label>
-                    <input type="text" name="length" id="ship_length" value="" class="text ui-widget-content ui-corner-all number ship_val">
-                </div>
-                <hr>
-                <div class="row">
-                    <label for="email" class="">Data Od</label>
-                    <input type="text" class="date" name="date_start">
-                </div>
-                <div class="row">
-                    <label for="email" class="">Data Do</label>
-                    <input type="text" class="date" name="date_end">
-                </div>
-                <hr>
-                <div class="row text-center">
-                    <input type="submit" value="Dodaj postój">
-                </div>
-                {% csrf_token %}
-            </fieldset>
-        </form>
-    </div>
     <div id="date_form" class="container">
-        <form class="serialise_form">
+        <form>
             <fieldset>
                 <div class="row">
                     <label for="date_start" class="">Data Od</label>
-                    <input type="text" class="date date_now serial" name="date_start">
+                    <input type="text" class="date date_now serial refresh_change" name="date_start" id="date_start">
                     <label for="date_end" class="">Data Do</label>
-                    <input type="text" class="date date_now serial" name="date_end">
+                    <input type="text" class="date date_now serial refresh_change" name="date_end" id="date_end">
                     <label for="show_hubs" class="">Postumenty</label>
-                    <input type="checkbox" name="show_hubs" checked class="serial">
+                    <input type="checkbox" name="show_hubs" checked class="serial refresh_click">
                     <label for="show_free" class="">Wolne</label>
-                    <input type="checkbox" name="show_free" checked class="serial">
+                    <input type="checkbox" name="show_free" checked class="serial refresh_click">
                     <label for="show_booked" class="">Zajete</label>
-                    <input type="checkbox" name="show_booked" checked class="serial">
-                    <label for="show_residents" class="">Rezydenci</label>
-                    <input type="checkbox" name="show_residents" checked class="serial">
+                    <input type="checkbox" name="show_booked" checked class="serial refresh_click">
+                    <label for="show_resident" class="">Rezydenci</label>
+                    <input type="checkbox" name="show_resident" checked class="serial refresh_click">
                 </div>
             </fieldset>
         </form>

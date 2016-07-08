@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     'crispy_forms',
     # for a social login
     'social.apps.django_app.default',
+    # custom common tools
+    'utils',
     # custom applications
     'marina',
 ]
