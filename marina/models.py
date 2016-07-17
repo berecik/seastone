@@ -104,6 +104,18 @@ class Hub(models.Model):
         ordering = ['order', 'id']
 
 
+class YBom(models.Model):
+    pier = models.ForeignKey(Pier)
+    left = models.BooleanField()
+    order = models.IntegerField(default=0)
+
+    def __unicode__(self):
+        return "%s %s" % (unicode(self.pier), self.order)
+
+    class Meta:
+        ordering = ['order', 'id']
+
+
 class Flag(models.Model):
     name = models.CharField(max_length=1024, db_index=True)
     code = models.CharField(max_length=6, db_index=True)

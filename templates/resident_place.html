@@ -9,6 +9,11 @@
 {% for resident, leaves in residents %}
    <li>{{ resident.ship }}: od {{ resident.date_start }}{% if resident.date_end %} do {{ resident.date_end }}{% endif %}
        <button id="remove_contract_{{ resident.pk }}">Usuń</button>
+       <ul>
+           {% for leave in leaves %}
+               
+           {% endfor %}
+       </ul>
     </li>
 {% endfor %}
 </ul>

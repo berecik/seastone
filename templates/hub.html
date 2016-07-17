@@ -13,7 +13,7 @@
     <ul>
         {% for connector in hub.connectors %}
             <li class="row">
-                <div class="col-sm-5"><button>Podłącz jacht</button></div><div class="col-sm-2">{{ connector.name }}</div><div class="col-sm-5"><button>Spisz stan</button> Licznik: {{ connector.counter }}</div>
+                {{ connector.name }}: <button>Podłącz jacht</button> Licznik: <input type="number" value="{{ connector.counter }}"><button>Zapisz stan</button>
             </li>
         {% endfor %}
         </ul>

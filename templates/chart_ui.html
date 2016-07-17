@@ -21,10 +21,10 @@
                 },
             {% endfor %}
         ];
-{#        hubs = {};#}
-{#        places = {};#}
-{#        piers = {};#}
-{#        map = null;#}
+        {#        hubs = {};#}
+        {#        places = {};#}
+        {#        piers = {};#}
+        {#        map = null;#}
     </script>
     <script>
         $(document).ready(function() {
@@ -49,8 +49,7 @@
 
                 var _lpm = 1/111120;
 
-                var _lmj = 12/111120;
-                var _lmi = 2/111120;
+
                 var _r = 90/(90-_xb);
                 var _xp = _xb-_xe;
                 var _yp = _yb-_ye;
@@ -59,14 +58,25 @@
 
                 var _lp = Math.sqrt(_xp*_xp+_yp*_yp);
                 var _fpm = _lpm/_lp;
-                var _fmj = _lmj/_lp;
-                var _fmi = _lmi/_lp;
+
                 var _xpm = (_xp*_fpm)*_r;
                 var _ypm = (_yp*_fpm)*-1;
-                var _xmj = (_xp*_fmj)*_r;
-                var _ymj = (_yp*_fmj)*-1;
+
+                var _lmi = 2/111120;
+                var _fmi = _lmi/_lp;
                 var _xmi = (_xp*_fmi)*_r;
                 var _ymi = (_yp*_fmi)*-1;
+
+                var _lmi_yb = 1/111120;
+                var _fmi_yb = _lmi_yb/_lp;
+                var _xmi_yb = (_xp*_fmi_yb)*_r;
+                var _ymi_yb = (_yp*_fmi_yb)*-1;
+
+                var _lmj_yb = 15/111120;
+                var _fmj_yb = _lmj_yb/_lp;
+                var _xmj_yb = (_xp*_fmj_yb)*_r;
+                var _ymj_yb = (_yp*_fmj_yb)*-1;
+
                 var _im = 0;
                 var _li = 0;
                 var pier = {
@@ -77,23 +87,28 @@
                         [_xb - _ypm, _yb - _xpm]
                     ]),
                     places: {},
-                    hubs: {}
+                    hubs: {},
+                    yboms: {}
                 };
                 piers[{{ pier.id }}] = pier;
                 var place;
                 var hub;
+
 
                 {% for item in items %}
                     place = null;
                     hub = null;
                     _set_place = function(place){
                         if(place && place.icon){
-{#                            place.icon.bindPopup("<div class=\"place {% if action == 'edit' %}place_sort{% endif %}\"><input class=\"place_id\" type=\"hidden\" value=\"{{ pier.id }}__{{ item.type }}__{{ item.id }}\"><div class=\"well row\"><div >{% if item.ship %}<button>Podłącz przyłącze</button>{% endif %}</div><div>{{ item.name }}: ({{ item.min_length }}m.&nbsp;-&nbsp;{{ item.max_length }}m.)</div><div>{% if item.ship %}{{ item.ship }}<button>Rozlicz</button>{% else %}<button class=\"create_stay\" onclick=\"create_stay({{ item.id }})\">Dodaj postój</button>{% if action == 'contacts' %}<button>Dodaj rezydenta</button>{% endif %}{% endif %}</div></div></div>");#}
                             places[{{ item.id }}] = place;
                             pier.places[{{ item.id }}] = place;
                         }
                     };
                     {% if item.type == "place" %}
+                        var _lmj = ({{ item.max_length }}+2)/111120;
+                        var _fmj = _lmj/_lp;
+                        var _xmj = (_xp*_fmj)*_r;
+                        var _ymj = (_yp*_fmj)*-1;
                         {% if pier.left_site %}
                             {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
                             place = {
@@ -122,6 +137,48 @@
                         {% endif %}
                         _im++;
                         _set_place(place);
+                    {% endif %}
+                    {% if item.type == "ybom" %}
+                        var _li_yb = 0;
+                        if(_li){
+                        _li_yb = _li+1;
+                        }
+{#                         console.log(#}
+{#                            _xb - (_xpn * (_li * 6)) - _ymi_yb,#}
+{#                            _yb - (_ypn * (_li * 6)) - _xmi_yb);#}
+{#                         console.log(#}
+{#                            _xb - (_xpn * (_li * 6)) - _ymj_yb,#}
+{#                            _yb - (_ypn * (_li * 6)) - _xmj_yb);#}
+{#                         console.log(#}
+{#                            _xb - (_xpn * (_li * 6)) + _ymi_yb,#}
+{#                            _yb - (_ypn * (_li * 6)) + _xmi_yb);#}
+{#                         console.log(#}
+{#                            _xb - (_xpn * (_li * 6)) + _ymj_yb,#}
+{#                            _yb - (_ypn * (_li * 6)) + _xmj_yb);#}
+{#                        console.log("=====");#}
+                        ybom = {
+                            {% if item.left %}
+                                icon: L.polyline(
+                                        [
+                                            [_xb - (_xpn * (_li_yb * 6)) - _ymi_yb, _yb - (_ypn * (_li_yb * 6)) - _xmi_yb],
+                                            [_xb - (_xpn * (_li_yb * 6)) - _ymj_yb, _yb - (_ypn * (_li_yb * 6)) - _xmj_yb]
+                                        ],
+                                        {weight: 10}
+                                ),
+                            {% else %}
+                                icon: L.polyline(
+                                        [
+                                            [_xb - (_xpn * (_li_yb * 6)) + _ymi_yb, _yb - (_ypn * (_li_yb * 6)) + _xmi_yb],
+                                            [_xb - (_xpn * (_li_yb * 6)) + _ymj_yb, _yb - (_ypn * (_li_yb * 6)) + _xmj_yb]
+                                        ],
+                                        {weight: 10}
+                                ),
+                            {% endif %}
+                            connection: [_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))]
+                        };
+{#                        ybom.icon.bindPopup("<b>{{ item }}</b>");#}
+                        yboms[{{ item.id }}] = ybom;
+                        pier.yboms[{{ item.id }}] = ybom;
                     {% endif %}
                     {% if item.type == "hub" %}
                         hub = {

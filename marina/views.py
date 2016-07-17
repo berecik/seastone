@@ -13,7 +13,7 @@ from utils.tools import iso_to_py_date, py_to_iso_date, iso2js
 from utils.decorators import parse_args, json_response, check_action, template_response
 
 from tools import pl_to_py_date
-from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector, Contract, Leave
+from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector, Contract, Leave, YBom
 from .data import get_places, get_ships
 
 
@@ -335,6 +335,9 @@ def places(request, date_start, date_end, marina, **kwargs):
             for connector in hub.connectors:
                 connector.counter = 4
             _items.append((hub.order, hub))
+        for ybom in YBom.objects.filter(pier=pier):
+            ybom.type = "ybom"
+            _items.append((ybom.order, ybom))
         piers.append([pier, map(lambda x: x[1], sorted(_items))])
         # column_size = max(2, int(12/(len(piers)+1)))
 

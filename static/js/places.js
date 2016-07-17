@@ -4,6 +4,7 @@
 hubs = {};
 places = {};
 piers = {};
+yboms = {};
 map = null;
 
 function _places(places, action){
@@ -44,8 +45,17 @@ function _draw_place(item, color){
     item.connector.addTo(map);
 }
 
-draw_hubs = _places(hubs, function(item){_draw(item, 'blue');});
-draw_places = _places(places, function(item){_draw(item, 'green');});
+draw_hubs =     _places(hubs,   function(item){
+    _draw(item, 'blue');
+});
+
+draw_yboms =     _places(yboms,   function(item){
+    _draw(item, 'blue');
+});
+
+draw_places =   _places(places, function(item){
+    _draw(item, 'green');
+});
 
 STATE_COLORS = {
     "resident": "yellow",
@@ -60,6 +70,7 @@ function draw_all() {
         if($('[name="show_hubs"]').is(':checked')){
             draw_hubs();
         }
+        draw_yboms();
         $.each(data, function (state) {
             if($('[name="show_'+state+'"]').is(':checked')) {
                 var color = STATE_COLORS[state];
