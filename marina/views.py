@@ -59,15 +59,42 @@ def _get_marina(*args, **kwargs):
     return _marina_dict
 
 
+def _get_get(request, *args, **kwargs):
+    _kwargs = {}
+    for name in request.GET:
+        _kwargs[name] = request.GET[name]
+
+
+def _get_post(request, *args, **kwargs):
+    _kwargs = {}
+    for name in request.POST:
+        _kwargs[name] = request.POST[name]
+
+
+def _get_boat_size(request, *args, **kwargs):
+    boat_size_txt = request.GET.get('boat_size', None)
+    _boat_size = {
+        "boat_size": None,
+    }
+    if boat_size_txt:
+        try:
+            _boat_size = {
+                "boat_size": int(boat_size_txt),
+            }
+        except:
+            pass
+    return _boat_size
+
+
 def _get_range(request, *args, **kwargs):
     "&date_start=2016-7-4&date_end=2016-7-4"
-    date_start_txt = getattr(request.GET, 'date_start', None)
+    date_start_txt = request.GET.get('date_start', None)
     if date_start_txt:
         date_start = iso_to_py_date(date_start_txt)
     else:
         date_start = date.today()
 
-    date_end_txt = getattr(request.GET, 'date_end', None)
+    date_end_txt = request.GET.get('date_end', None)
     if date_end_txt:
         date_end = iso_to_py_date(date_end_txt)
     else:
@@ -201,6 +228,7 @@ PLACE_STATE_ACTION = {
     "booked": booked_place
 }
 
+
 @parse_args(_get_range)
 def place_state(request, date_start, date_end, _id, **kwargs):
     place_id = int(_id)
@@ -219,9 +247,9 @@ PLACES_ACTIONS = (
     ("remove_contract", remove_contract, None)
 )
 
-@parse_args(_get_range, _get_marina)
+@parse_args(_get_range, _get_marina, _get_boat_size)
 @check_action(PLACES_ACTIONS, json_response())
-def places(request, date_start, date_end, marina, **kwargs):
+def places(request, date_start, date_end, boat_size, marina, **kwargs):
 
     _template = "chart_ui.html"
     piers = []

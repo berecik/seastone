@@ -21,21 +21,26 @@ function _remove(item) {
     }
 }
 
-function _draw(item, color){
-    if(!color){
-        color = 'red';
+function _draw(item, color, style){
+    var _style = {
+        color: 'blue',
+        fillColor: 'blue',
+        fillOpacity: 0.2
+    };
+    if(style){
+        _style = style;
     }
-    item.icon.setStyle({
-        color: color,
-        fillColor: color,
-        fillOpacity: 1
-    });
+    if(color){
+        _style.color = color;
+        _style.fillColor = color;
+    }
+    item.icon.setStyle(_style);
     item.icon.addTo(map);
 }
 
 function _draw_place(item, color){
     if(!color){
-        color = 'red';
+        color = 'blue';
     }
     item.icon.setStyle({
         color: color,
@@ -46,11 +51,15 @@ function _draw_place(item, color){
 }
 
 draw_hubs =     _places(hubs,   function(item){
-    _draw(item, 'blue');
+    _draw(item);
 });
 
 draw_yboms =     _places(yboms,   function(item){
-    _draw(item, 'blue');
+    _draw(item);
+});
+
+draw_piers =     _places(piers,   function(item){
+    _draw(item, null, {});
 });
 
 draw_places =   _places(places, function(item){
@@ -63,14 +72,27 @@ STATE_COLORS = {
     "booked": "red"
 };
 
+ITEMS_DISPLAY = {
+    "show_hubs": draw_hubs,
+    "show_ybooms": draw_yboms,
+    "show_piers": draw_piers
+};
+
+
+
 function draw_all() {
     $.get(get_url(null, 'get_places'), function (data) {
         _places(hubs, _remove)();
         _places(places, _remove)();
-        if($('[name="show_hubs"]').is(':checked')){
-            draw_hubs();
-        }
-        draw_yboms();
+        _places(piers, _remove)();
+        _places(yboms, _remove)();
+
+        $.each(ITEMS_DISPLAY, function (cbx_name) {
+            if($('[name="'+cbx_name+'"]').is(':checked')){
+                ITEMS_DISPLAY[cbx_name]();
+            }
+        });
+
         $.each(data, function (state) {
             if($('[name="show_'+state+'"]').is(':checked')) {
                 var color = STATE_COLORS[state];
@@ -79,6 +101,7 @@ function draw_all() {
                     var id = ids[i];
                     var item = places[id];
                     _draw(item, color);
+                    item.icon.clearAllEventListeners();
                     item.icon.on('click', function(id, item){
                         $.get(get_url(null, 'place_state='+id), create_popup.bind(null, id, item));
                     }.bind(null, id, item));
@@ -186,14 +209,14 @@ function set_stay(place_id) {
         var url = get_url(null, 'place_state='+place_id);
         var data = $("#form_"+place_id).serialize();
         $.ajax({
-               type: "POST",
-               url: url,
-               data: data,
-               success: function(content)
-               {
-                   set_popup(place_id, content);
-               }
-             });
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(content)
+            {
+                set_popup(place_id, content);
+            }
+        });
         if(e){
             e.preventDefault();
         }
@@ -206,14 +229,14 @@ function edit_place(place_id) {
         var url = get_url(null, 'edit_place='+place_id);
         var data = $("#form_"+place_id).serialize();
         $.ajax({
-               type: "POST",
-               url: url,
-               data: data,
-               success: function(content)
-               {
-                   set_popup(place_id, content);
-               }
-             });
+            type: "POST",
+            url: url,
+            data: data,
+            success: function(content)
+            {
+                set_popup(place_id, content);
+            }
+        });
         if(e){
             e.preventDefault();
         }

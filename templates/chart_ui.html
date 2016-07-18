@@ -72,7 +72,7 @@
                 var _xmi_yb = (_xp*_fmi_yb)*_r;
                 var _ymi_yb = (_yp*_fmi_yb)*-1;
 
-                var _lmj_yb = 15/111120;
+                var _lmj_yb = 10/111120;
                 var _fmj_yb = _lmj_yb/_lp;
                 var _xmj_yb = (_xp*_fmj_yb)*_r;
                 var _ymj_yb = (_yp*_fmj_yb)*-1;
@@ -205,6 +205,8 @@
         <form>
             <fieldset>
                 <div class="row">
+                    <label for="date_start" class="">Długość</label>
+                    <input type="number" class="serial refresh_change" name="boat_size" id="boat_size">
                     <label for="date_start" class="">Data Od</label>
                     <input type="text" class="date date_now serial refresh_change" name="date_start" id="date_start">
                     <label for="date_end" class="">Data Do</label>
@@ -217,6 +219,10 @@
                     <input type="checkbox" name="show_booked" checked class="serial refresh_click">
                     <label for="show_resident" class="">Rezydenci</label>
                     <input type="checkbox" name="show_resident" checked class="serial refresh_click">
+                    <label for="show_resident" class="">Y-Bomy</label>
+                    <input type="checkbox" name="show_ybooms" checked class="serial refresh_click">
+                    <label for="show_resident" class="">Pomosty</label>
+                    <input type="checkbox" name="show_piers"  class="serial refresh_click">
                 </div>
             </fieldset>
         </form>
