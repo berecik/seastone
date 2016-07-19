@@ -79,7 +79,7 @@ def _get_boat_size(request, *args, **kwargs):
     if boat_size_txt:
         try:
             _boat_size = {
-                "boat_size": int(boat_size_txt),
+                "boat_size": float(boat_size_txt),
             }
         except:
             pass

@@ -21,6 +21,13 @@ function _remove(item) {
     }
 }
 
+function _unbind(item) {
+    if(map.hasLayer(item.icon)){
+        item.icon.clearAllEventListeners();
+    }
+}
+
+
 function _draw(item, color, style){
     var _style = {
         color: 'blue',
@@ -79,13 +86,18 @@ ITEMS_DISPLAY = {
 };
 
 
+ITEMS_LISTS = [hubs, places, piers, yboms]
+
 
 function draw_all() {
     $.get(get_url(null, 'get_places'), function (data) {
-        _places(hubs, _remove)();
-        _places(places, _remove)();
-        _places(piers, _remove)();
-        _places(yboms, _remove)();
+        for (var _i in ITEMS_LISTS) {
+            _places(ITEMS_LISTS[_i], _remove)();
+        };
+        // _places(hubs, _remove)();
+        // _places(places, _remove)();
+        // _places(piers, _remove)();
+        // _places(yboms, _remove)();
 
         $.each(ITEMS_DISPLAY, function (cbx_name) {
             if($('[name="'+cbx_name+'"]').is(':checked')){
@@ -109,6 +121,9 @@ function draw_all() {
             }
         })
     });
+    for (var _i in ITEMS_LISTS) {
+        _places(ITEMS_LISTS[_i], _unbind)();
+    }
 }
 
 function refresh() {

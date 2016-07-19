@@ -7,7 +7,7 @@ def get_places(date_start, date_end, boat_size, marina, **kwargs):
     for pier in Pier.objects.filter(marina=marina):
         places = Place.objects.filter(pier=pier)
         if boat_size:
-            places.filter(min_length__lte=boat_size, max_length__gte=boat_size)
+            places = places.filter(min_length__lte=boat_size, max_length__gte=boat_size)
         for place in places:
             state = place.state(date_start, date_end)
             if state not in places_dict:
