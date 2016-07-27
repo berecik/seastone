@@ -59,6 +59,11 @@ function _draw_place(item, color){
 
 draw_hubs =     _places(hubs,   function(item){
     _draw(item);
+    var id = item.id;
+    item.icon.clearAllEventListeners();
+    item.icon.on('click', function(id, item){
+        $.get(get_url(null, 'hub_state='+id), create_popup.bind(null, id, item));
+    }.bind(null, id, item));
 });
 
 draw_yboms =     _places(yboms,   function(item){

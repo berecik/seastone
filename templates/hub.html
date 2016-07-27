@@ -5,23 +5,23 @@
     {% endblock script %}
 </textarea>
 <div id="title_{{ hub_id }}" class="row">
-    <b class="pull-left">{{ hub.pier.name }} Postument {{ hub.name }}</b>
+    <b class="pull-left">{{ hub.pier.name }} {{ hub.name }}</b>
 </div>
 <hr>
 <div id="hub_{{ hub_id }}">
     {% block form %}
-    <ul>
-        {% for connector in hub.connectors %}
-            <li class="row">
-                {{ connector.name }}: <button>Podłącz jacht</button> Licznik: <input type="number" value="{{ connector.counter }}"><button>Zapisz stan</button>
-            </li>
+{#    <ul>#}
+        {% for connector in connectors %}
+            <div class="row">
+                {{ connector.name }}: <button>Podłącz jacht</button> Licznik: <input type="number" value="{{ connector.counter }}">
+            </div>
         {% endfor %}
-        </ul>
+{#    </ul>#}
     {% endblock form%}
     <fieldset>
         {% block buttons %}
             {% block submit %}
-                <button id="submit_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz{% endblock submit_text %}</button>
+                <button id="submit_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz liczniki{% endblock submit_text %}</button>
             {% endblock submit %}
             <button id="close_{{ hub_id }}" class="pull-right">Zamknij</button>
         {% endblock buttons %}

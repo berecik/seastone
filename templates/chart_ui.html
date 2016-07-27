@@ -101,6 +101,7 @@
                 var _im = 0;
                 var _li = 0;
                 var pier = {
+                    id: {{ pier.id }},
                     icon: L.polygon([
                         [_xb + _ypm, _yb + _xpm],
                         [_xe + _ypm, _ye + _xpm],
@@ -133,6 +134,7 @@
                         {% if pier.left_site %}
                             {% if pier.right_site %}if(_im%2==0){ _li = _im/2; {% else %} _li = _im;{% endif %}
                             place = {
+                                id: {{ item.id }},
                                 icon: L.polygon([
                                     [_xb-(_xpn*(_li*6+1))-_ymi, _yb-(_ypn*(_li*6+1))-_xmi],
                                     [_xb-(_xpn*(_li*6+3))-_ymj, _yb-(_ypn*(_li*6+3))-_xmj],
@@ -146,6 +148,7 @@
                         {% if pier.right_site %}
                             {% if pier.left_site %}if(_im%2==1){ _li = (_im - 1) / 2; {% else %} _li = _im;{% endif %}
                             place ={
+                                id: {{ item.id }},
                                 icon: L.polygon([
                                     [_xb - (_xpn * (_li * 6 + 1)) + _ymi, _yb - (_ypn * (_li * 6 + 1)) + _xmi],
                                     [_xb - (_xpn * (_li * 6 + 3)) + _ymj, _yb - (_ypn * (_li * 6 + 3)) + _xmj],
@@ -178,6 +181,7 @@
                         {#                            _yb - (_ypn * (_li * 6)) + _xmj_yb);#}
                         {#                        console.log("=====");#}
                         ybom = {
+                            id: {{ item.id }},
                             {% if item.left %}
                                 icon: L.polyline(
                                         [
@@ -203,6 +207,7 @@
                     {% endif %}
                     {% if item.type == "hub" %}
                         hub = {
+                            id: {{ item.id }},
                             icon: L.circle([_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))], 1),
                             connection: [_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))]
                         };

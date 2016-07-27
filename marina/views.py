@@ -237,6 +237,20 @@ def place_state(request, date_start, date_end, _id, **kwargs):
     return PLACE_STATE_ACTION[state](request, date_start=date_start, date_end=date_end, place=place, **kwargs)
 
 
+def hub_state(request, _id, **kwargs):
+    hub_id = int(_id)
+    hub = Hub.objects.get(pk=hub_id)
+    connectors = Connector.objects.filter(hub=hub)
+    for connector in connectors:
+        connector.counter = 4
+    _context = {
+        "hub": hub,
+        "hub_id": hub_id,
+        "connectors": connectors,
+    }
+    return render(request, "hub.html", _context)
+
+
 PLACES_ACTIONS = (
     ("get_places", get_places),
     ("get_ships", get_ships),
@@ -244,8 +258,10 @@ PLACES_ACTIONS = (
     ("close_popup", close_popup, None),
     ("edit_place", edit_place, None),
     ("remove_stay", remove_stay, None),
-    ("remove_contract", remove_contract, None)
+    ("remove_contract", remove_contract, None),
+    ("hub_state", hub_state, None),
 )
+
 
 @parse_args(_get_range, _get_marina, _get_boat_size)
 @check_action(PLACES_ACTIONS, json_response())
