@@ -5,9 +5,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
     <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
     <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
+    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>
+    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>
     <script src="{% static 'js/places.js' %}"></script>
     <style>
         #mapid { height: 800px; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        table {
+            font-size: 1em;
+        }
+
+        .ui-draggable, .ui-droppable {
+            background-position: top;
+        }
     </style>
     <script>
         var ships = [
@@ -28,6 +42,13 @@
     </script>
     <script>
         $(document).ready(function() {
+
+            $( function() {
+                $( "#visible input" ).checkboxradio({
+                    icon: false
+                });
+            } );
+
             var _height = $(window).height()-50;
             $('#mapid').css('height', _height);
             map = L.map('mapid', {
@@ -141,21 +162,21 @@
                     {% if item.type == "ybom" %}
                         var _li_yb = 0;
                         if(_li){
-                        _li_yb = _li+1;
+                            _li_yb = _li+1;
                         }
-{#                         console.log(#}
-{#                            _xb - (_xpn * (_li * 6)) - _ymi_yb,#}
-{#                            _yb - (_ypn * (_li * 6)) - _xmi_yb);#}
-{#                         console.log(#}
-{#                            _xb - (_xpn * (_li * 6)) - _ymj_yb,#}
-{#                            _yb - (_ypn * (_li * 6)) - _xmj_yb);#}
-{#                         console.log(#}
-{#                            _xb - (_xpn * (_li * 6)) + _ymi_yb,#}
-{#                            _yb - (_ypn * (_li * 6)) + _xmi_yb);#}
-{#                         console.log(#}
-{#                            _xb - (_xpn * (_li * 6)) + _ymj_yb,#}
-{#                            _yb - (_ypn * (_li * 6)) + _xmj_yb);#}
-{#                        console.log("=====");#}
+                        {#                         console.log(#}
+                        {#                            _xb - (_xpn * (_li * 6)) - _ymi_yb,#}
+                        {#                            _yb - (_ypn * (_li * 6)) - _xmi_yb);#}
+                        {#                         console.log(#}
+                        {#                            _xb - (_xpn * (_li * 6)) - _ymj_yb,#}
+                        {#                            _yb - (_ypn * (_li * 6)) - _xmj_yb);#}
+                        {#                         console.log(#}
+                        {#                            _xb - (_xpn * (_li * 6)) + _ymi_yb,#}
+                        {#                            _yb - (_ypn * (_li * 6)) + _xmi_yb);#}
+                        {#                         console.log(#}
+                        {#                            _xb - (_xpn * (_li * 6)) + _ymj_yb,#}
+                        {#                            _yb - (_ypn * (_li * 6)) + _xmj_yb);#}
+                        {#                        console.log("=====");#}
                         ybom = {
                             {% if item.left %}
                                 icon: L.polyline(
@@ -176,7 +197,7 @@
                             {% endif %}
                             connection: [_xb-(_xpn*(_li*6)), _yb-(_ypn*(_li*6))]
                         };
-{#                        ybom.icon.bindPopup("<b>{{ item }}</b>");#}
+                        {#                        ybom.icon.bindPopup("<b>{{ item }}</b>");#}
                         yboms[{{ item.id }}] = ybom;
                         pier.yboms[{{ item.id }}] = ybom;
                     {% endif %}
@@ -203,29 +224,31 @@
 {% block content %}
     <div id="date_form" class="container">
         <form>
-            <fieldset>
-                <div class="row">
-
-                    <label for="date_start" class="">Długość</label>
-                    <input type="number" class="serial refresh_change" name="boat_size" id="boat_size">
-                    <label for="date_start" class="">Data Od</label>
+            <div class="row">
+                <fieldset>
+                    <label for="boat_size" class="">Długość:</label>
+                    <input type="number" class="serial refresh_change" name="boat_size" id="boat_size" size="3">
+                    <label for="date_start" class="">Data Od:</label>
                     <input type="text" class="date date_now serial refresh_change" name="date_start" id="date_start">
-                    <label for="date_end" class="">Data Do</label>
+                    <label for="date_end" class="">Do:</label>
                     <input type="text" class="date date_now serial refresh_change" name="date_end" id="date_end">
-                    <label for="show_hubs" class="">Postumenty</label>
-                    <input type="checkbox" name="show_hubs" checked class="serial refresh_click">
-                    <label for="show_free" class="">Wolne</label>
-                    <input type="checkbox" name="show_free" checked class="serial refresh_click">
-                    <label for="show_booked" class="">Zajete</label>
-                    <input type="checkbox" name="show_booked" checked class="serial refresh_click">
-                    <label for="show_resident" class="">Rezydenci</label>
-                    <input type="checkbox" name="show_resident" checked class="serial refresh_click">
-                    <label for="show_resident" class="">Y-Bomy</label>
-                    <input type="checkbox" name="show_ybooms" checked class="serial refresh_click">
-                    <label for="show_resident" class="">Pomosty</label>
-                    <input type="checkbox" name="show_piers"  class="serial refresh_click">
-                </div>
-            </fieldset>
+{#                    <input type="text" class="form-control" name="date_range" id="date_range" placeholder="Select date range..">#}
+                    <spam id="visible">
+                        <label for="show_free" class="">Wolne</label>
+                        <input type="checkbox" name="show_free" id="show_free" checked class="serial refresh_click">
+                        <label for="show_booked" class="">Zajete</label>
+                        <input type="checkbox" name="show_booked" id="show_booked" checked class="serial refresh_click">
+                        <label for="show_resident" class="">Rezydenci</label>
+                        <input type="checkbox" name="show_resident" id="show_resident" checked class="serial refresh_click">
+                        <label for="show_hubs" class="">Postumenty</label>
+                        <input type="checkbox" name="show_hubs" id="show_hubs" checked class="serial refresh_click">
+                        <label for="show_ybooms" class="">Y-Bomy</label>
+                        <input type="checkbox" name="show_ybooms" id="show_ybooms" checked class="serial refresh_click">
+                        <label for="show_piers" class="">Pomosty</label>
+                        <input type="checkbox" name="show_piers" id="show_piers" class="serial refresh_click">
+                    </spam>
+                </fieldset>
+            </div>
         </form>
     </div>
     <div id="mapid"></div>
