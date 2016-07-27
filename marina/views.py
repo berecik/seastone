@@ -272,6 +272,21 @@ def connect_counter(request, _id, **kwargs):
     except:
         place_id = None
 
+    if place_id:
+        place = Place.objects.get(id=place_id)
+        stays = place.ships(date_start=date.today(), date_end=date.today())
+        if stays:
+            stay = stays[0][0]
+            connector.set_stay(stay, counter)
+            return hub_state(request, _id=hub_id, **kwargs)
+        contracts = place.resident(date_start=date.today(), date_end=date.today())
+        if contracts:
+            contract = contracts[0][0]
+            connector.set_contract(contract, counter)
+            return hub_state(request, _id=hub_id, **kwargs)
+        place_id = None
+
+
     if not place_id:
         place_models = Place.objects.filter(pier=connector.hub.pier)
         places = []
@@ -286,7 +301,7 @@ def connect_counter(request, _id, **kwargs):
             "hub_id": hub_id
         }
         return render(request, "connect_counter.html", _context)
-    return hub_state(request, _id=hub_id, **kwargs)
+
 
 PLACES_ACTIONS = (
     ("get_places", get_places),
