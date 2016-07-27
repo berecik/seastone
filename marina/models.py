@@ -150,11 +150,27 @@ class Occupation(models.Model):
 
 class Stay(Occupation):
 
+    @property
+    def current_connector(self):
+        connection = Connection.objects.filter(stay=self)
+        if connection:
+            connector = connection[0].connector
+            return connector
+        return None
+
     def __unicode__(self):
         return "%s: %s %s-%s" % (unicode(self.place), unicode(self.ship), unicode(self.date_start), unicode(self.date_end))
 
 
 class Contract(Occupation):
+
+    @property
+    def current_contract(self):
+        connection = Connection.objects.filter(contract=self)
+        if connection:
+            connector = connection[0].connector
+            return connector
+        return None
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.ship.name), unicode(self.place.name))
@@ -268,15 +284,16 @@ class Connector(models.Model):
                 stay=last_connection.stay if last_connection else None,
                 contract=last_connection.contract if last_connection else None,
                 date_start=date.today(),
-                date_end=None,
-                counter_start=counter,
-                counter_end=None
+                date_end=None if last_connection else date.today(),
+                counter_start=counter if last_connection else 0,
+                counter_end=None if last_connection else counter
             )
             new_connection.save()
             if last_connection:
                 last_connection.date_end = date.today()
                 last_connection.counter_end = counter
                 last_connection.save()
+        return new_connection
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.hub), self.name)

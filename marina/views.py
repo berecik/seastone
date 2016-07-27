@@ -252,6 +252,41 @@ def hub_state(request, _id, **kwargs):
     }
     return render(request, "hub.html", _context)
 
+def save_counters(request, _id, **kwargs):
+    hub_id = int(_id)
+    hub = Hub.objects.get(pk=hub_id)
+    connectors = Connector.objects.filter(hub=hub)
+    for connector in connectors:
+        counter = request.GET.get('counter_%s' % connector.id)
+        if counter:
+            connector.set_counter(int(counter))
+    return hub_state(request, _id=hub_id, **kwargs)
+
+def connect_counter(request, _id, **kwargs):
+    connector_id = int(_id)
+    connector = Connector.objects.get(pk=connector_id)
+    hub_id = connector.hub.id
+    try:
+        counter = int(request.GET.get('counter'))
+        place_id = int(request.GET.get('place_id'))
+    except:
+        place_id = None
+
+    if not place_id:
+        place_models = Place.objects.filter(pier=connector.hub.pier)
+        places = []
+        for place_model in place_models:
+            state = place_model.state(date_start=date.today(), date_end=date.today())
+            if state == "resident" or state == "booked":
+                places.append(place_model)
+        _context = {
+            "connector": connector,
+            "places": places,
+            "connector_id": connector_id,
+            "hub_id": hub_id
+        }
+        return render(request, "connect_counter.html", _context)
+    return hub_state(request, _id=hub_id, **kwargs)
 
 PLACES_ACTIONS = (
     ("get_places", get_places),
@@ -262,6 +297,8 @@ PLACES_ACTIONS = (
     ("remove_stay", remove_stay, None),
     ("remove_contract", remove_contract, None),
     ("hub_state", hub_state, None),
+    ("save_counters", save_counters, None),
+    ("connect_counter", connect_counter, None)
 )
 
 

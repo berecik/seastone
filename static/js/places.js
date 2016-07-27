@@ -135,12 +135,12 @@ function refresh() {
     draw_all();
 }
 
-function create_popup(place_id, item, content) {
-    item.icon.bindPopup(content, {maxWidth: null, minWidth: 500, keepInView: true, closeButton: false});
+function create_popup(_id, item, content) {
+    item.icon.bindPopup(content, {maxWidth: null, minWidth: 500, closeButton: false});
     item.icon.openPopup();
     item.popup = item.icon._popup;
-    var _call_txt = $("#_call_"+place_id).text();
-    $("#_call_"+place_id).hide();
+    var _call_txt = $("#_call_"+_id).text();
+    $("#_call_"+_id).hide();
     eval(_call_txt);
 }
 
@@ -150,6 +150,14 @@ function set_popup(place_id, content) {
     item.icon._popup.setContent(content);
     var _call_txt = $("#_call_"+place_id).text();
     $("#_call_"+place_id).hide();
+    eval(_call_txt);
+}
+
+function set_hub_popup(hub_id, content) {
+    var item = hubs[hub_id];
+    item.icon._popup.setContent(content);
+    var _call_txt = $("#_call_"+hub_id).text();
+    $("#_call_"+hub_id).hide();
     eval(_call_txt);
 }
 
@@ -175,6 +183,15 @@ function set_action(place_id, action, action_id){
     );
 }
 
+function set_hub_action(hub_id, action, action_id){
+    if(!action_id){
+        action_id = hub_id;
+    }
+    $.get(
+        get_url(null, action+'='+action_id),
+        set_hub_popup.bind(null, hub_id)
+    );
+}
 
 function set_stay(place_id) {
     $( "#date_start_"+place_id ).datepicker($.datepicker.regional[ "pl" ],{

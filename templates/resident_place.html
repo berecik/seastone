@@ -8,11 +8,11 @@
 <ul>
 {% for resident, leaves in residents %}
    <li>{{ resident.ship }}: od {{ resident.date_start }}{% if resident.date_end %} do {{ resident.date_end }}{% endif %}
-       {% if stay.contact_name or  stay.contact_phone or stay.contact_email %}
+       {% if resident.contact_name or  resident.contact_phone or resident.contact_email %}
        <br>
-           Kontakt: {{ stay.contact_name }}
-           {% if stay.contact_phone %}telefon:{{ stay.contact_phone }}{% endif %}
-           {% if stay.contact_email %}email: <a href="mailto:{{ stay.contact_email }}">{{ stay.contact_email }}</a> {% endif %}
+           Kontakt: {{ resident.contact_name }}
+           {% if resident.contact_phone %}telefon:{{ resident.contact_phone }}{% endif %}
+           {% if resident.contact_email %}email: <a href="mailto:{{ resident.contact_email }}">{{ resident.contact_email }}</a> {% endif %}
        {% endif %}
        <button id="remove_contract_{{ resident.pk }}">Usuń</button>
        <ul>

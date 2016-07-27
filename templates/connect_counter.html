@@ -1,0 +1,36 @@
+<textarea id="_call_{{ hub_id }}" >
+    var hub_id = {{ hub_id }};
+    $("#close_hub_{{ hub_id }}").click(function(){close_hub_popup({{ hub_id }})});
+    $("#save_{{ hub_id }}").click(set_hub_action.bind(null, {{ hub_id }}, "connect_counter", {{ connector.id }}));
+    {% block script %}
+    {% endblock script %}
+</textarea>
+<div id="title_{{ hub_id }}" class="row">
+    <b class="pull-left">{{ hub.pier.name }} {{ hub.name }} {{ connector.name }}</b>
+</div>
+<hr>
+<div id="hub_{{ hub_id }}">
+    {% block form %}
+{#    <ul>#}
+        <div class="row">
+        <select name="place_id" class="serial">
+        <option>Wybierz miejsce:</option>
+            {% for place in places %}
+            <option value="{{ place.id }}">{{ place }}</option>
+            {% endfor %}
+        </select>
+        </div>
+        <div class="row">
+            Licznik: <input type="number" name="counter" value="{{ connector.counter }}" class="serial">
+        </div>
+{#    </ul>#}
+    {% endblock form%}
+    <fieldset>
+        {% block buttons %}
+            {% block submit %}
+                <button id="save_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz{% endblock submit_text %}</button>
+            {% endblock submit %}
+            <button id="close_hub_{{ hub_id }}" class="pull-right">Zamknij</button>
+        {% endblock buttons %}
+    </fieldset>
+</div>
