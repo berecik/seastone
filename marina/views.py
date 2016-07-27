@@ -276,7 +276,7 @@ def connect_counter(request, _id, **kwargs):
         place = Place.objects.get(id=place_id)
         stays = place.ships(date_start=date.today(), date_end=date.today())
         if stays:
-            stay = stays[0][0]
+            stay = stays[0]
             connector.set_stay(stay, counter)
             return hub_state(request, _id=hub_id, **kwargs)
         contracts = place.resident(date_start=date.today(), date_end=date.today())
