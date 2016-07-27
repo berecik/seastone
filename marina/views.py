@@ -149,6 +149,9 @@ def free_place(request, date_start, date_end, place=None, **kwargs):
         ship_id = request.POST.get('ship_id')
         length = request.POST.get('length')
         flag_code = request.POST.get('flag')
+        contact_name = request.POST.get('contact_name')
+        contact_phone = request.POST.get('contact_phone')
+        contact_email = request.POST.get('contact_email')
         # date_start = request.POST.get('date_start')
         # date_end = request.POST.get('date_end')
         flag = Flag.objects.get(code=flag_code)
@@ -160,10 +163,10 @@ def free_place(request, date_start, date_end, place=None, **kwargs):
         place = Place.objects.get(pk=int(place_id))
         type = request.POST.get('type')
         if type == "stay":
-            stay = Stay(place=place, ship=ship, date_start=date_start, date_end=date_end)
+            stay = Stay(place=place, ship=ship, date_start=date_start, date_end=date_end, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email)
             stay.save()
         elif type == "resident":
-            contract = Contract(place=place, ship=ship, date_start=date_start)
+            contract = Contract(place=place, ship=ship, date_start=date_start, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email)
             contract.save()
         return place_state(request, _id=place_id, **kwargs)
     elif place:
@@ -241,8 +244,7 @@ def hub_state(request, _id, **kwargs):
     hub_id = int(_id)
     hub = Hub.objects.get(pk=hub_id)
     connectors = Connector.objects.filter(hub=hub)
-    for connector in connectors:
-        connector.counter = 4
+
     _context = {
         "hub": hub,
         "hub_id": hub_id,
@@ -376,8 +378,6 @@ def places(request, date_start, date_end, boat_size, marina, **kwargs):
         for hub in Hub.objects.filter(pier=pier):
             hub.type = "hub"
             hub.connectors = Connector.objects.filter(hub=hub)
-            for connector in hub.connectors:
-                connector.counter = 4
             _items.append((hub.order, hub))
         for ybom in YBom.objects.filter(pier=pier):
             ybom.type = "ybom"

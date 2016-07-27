@@ -1,4 +1,5 @@
 from __future__ import unicode_literals
+from datetime import date
 
 from django.db import models
 from django.db.models import Q
@@ -134,21 +135,26 @@ class Ship(models.Model):
         return "%s (%s) %sm" % (self.name, unicode(self.flag), unicode(self.length))
 
 
-class Stay(models.Model):
+class Occupation(models.Model):
     place = models.ForeignKey(Place)
-    ship = models.ForeignKey(Ship, null=True)
+    ship = models.ForeignKey(Ship)
     date_start = models.DateField(null=True, blank=True)
     date_end = models.DateField(null=True, blank=True)
+    contact_name = models.CharField(max_length=1024, db_index=True, null=True, blank=True)
+    contact_phone = models.CharField(max_length=64, db_index=True, null=True, blank=True)
+    contact_email = models.CharField(max_length=64, db_index=True, null=True, blank=True)
+
+    class Meta:
+        abstract = True
+
+
+class Stay(Occupation):
 
     def __unicode__(self):
         return "%s: %s %s-%s" % (unicode(self.place), unicode(self.ship), unicode(self.date_start), unicode(self.date_end))
 
 
-class Contract(models.Model):
-    place = models.ForeignKey(Place)
-    ship = models.ForeignKey(Ship)
-    date_start = models.DateField(null=True, blank=True)
-    date_end = models.DateField(null=True, blank=True)
+class Contract(Occupation):
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.ship.name), unicode(self.place.name))
@@ -167,14 +173,119 @@ class Connector(models.Model):
     hub = models.ForeignKey(Hub)
     name = models.CharField(max_length=1024, db_index=True)
 
+    @property
+    def last_connection(self):
+        conection = Connection.objects.filter(connector=self).last()
+        return conection
+
+    @property
+    def counter(self):
+        if self.last_connection:
+            if self.last_connection.counter_end:
+                return self.last_connection.counter_end
+            else:
+                if self.last_connection.counter_start:
+                    return self.last_connection.counter_start
+        return 0
+
+    @property
+    def conected(self):
+        if self.last_connection:
+            if self.last_connection.counter_end:
+                return False
+            else:
+                return True
+        else:
+            return False
+
+    @property
+    def current_occupation(self):
+        if self.conected:
+            if self.last_connection.stay:
+                return self.last_connection.stay
+            if self.last_connection.contract:
+                return self.last_connection.contract
+        return None
+
+    @property
+    def current_ship(self):
+        if self.current_occupation:
+            return self.current_occupation.ship
+        return None
+
+    @property
+    def current_place(self):
+        if self.current_occupation:
+            return self.current_occupation.place
+        return None
+
+    def set_stay(self, stay, counter):
+        connection = Connection(
+            connector=self,
+            stay=stay,
+            contract=None,
+            date_start=date.today(),
+            date_end=None,
+            counter_start=counter,
+            counter_end=None
+        )
+        connection.save()
+
+    def set_contract(self, contract, counter):
+        connection = Connection(
+            connector=self,
+            stay=None,
+            contract=contract,
+            date_start=date.today(),
+            date_end=None,
+            counter_start=counter,
+            counter_end=None
+        )
+        connection.save()
+
+    def close_connection(self, counter):
+        last_connection = self.last_connection
+        last_connection.counter_end = counter
+        last_connection.date_end = date.today()
+        last_connection.save()
+
+    def set_counter(self, counter):
+        last_connection = self.last_connection
+        if last_connection and last_connection.date_end:
+            new_connection = Connection(
+                connector=self,
+                stay=None,
+                contract=None,
+                date_start=last_connection.date_end,
+                date_end=date.today(),
+                counter_start=last_connection.counter_end,
+                counter_end=counter
+            )
+            new_connection.save()
+        else:
+            new_connection = Connection(
+                connector=self,
+                stay=last_connection.stay if last_connection else None,
+                contract=last_connection.contract if last_connection else None,
+                date_start=date.today(),
+                date_end=None,
+                counter_start=counter,
+                counter_end=None
+            )
+            new_connection.save()
+            if last_connection:
+                last_connection.date_end = date.today()
+                last_connection.counter_end = counter
+                last_connection.save()
+
     def __unicode__(self):
         return "%s %s" % (unicode(self.hub), self.name)
 
 
 class Connection(models.Model):
     connector = models.ForeignKey(Connector)
-    place = models.ForeignKey(Place)
-    ship = models.ForeignKey(Ship)
+    stay = models.ForeignKey(Stay, null=True)
+    contract = models.ForeignKey(Contract, null=True)
     date_start = models.DateTimeField()
     date_end = models.DateTimeField(null=True, blank=True)
     counter_start = models.IntegerField(default=0)
@@ -182,6 +293,9 @@ class Connection(models.Model):
 
     def __unicode__(self):
         return "%s %s" % (unicode(self.connector), unicode(self.place))
+
+    class Meta:
+        ordering = ['counter_start', '-counter_end']
 
 
 

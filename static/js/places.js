@@ -159,6 +159,11 @@ function close_popup(place_id) {
     refresh();
 }
 
+function close_hub_popup(hub_id) {
+    var item = hubs[hub_id];
+    item.icon.closePopup();
+    refresh();
+}
 
 function set_action(place_id, action, action_id){
     if(!action_id){

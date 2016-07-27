@@ -8,6 +8,12 @@
 <ul>
 {% for stay in ships %}
    <li>{{ stay.ship }}: od {{ stay.date_start }} do {{ stay.date_end }}
+       {% if stay.contact_name or  stay.contact_phone or stay.contact_email %}
+       <br>
+           Kontakt: {{ stay.contact_name }}
+           {% if stay.contact_phone %}telefon:{{ stay.contact_phone }}{% endif %}
+           {% if stay.contact_email %}email: <a href="mailto:{{ stay.contact_email }}">{{ stay.contact_email }}</a> {% endif %}
+       {% endif %}
        <button id="remove_stay_{{ stay.pk }}">Usuń</button>
     </li>
 {% endfor %}
