@@ -152,6 +152,7 @@ def free_place(request, date_start, date_end, place=None, **kwargs):
         contact_name = request.POST.get('contact_name')
         contact_phone = request.POST.get('contact_phone')
         contact_email = request.POST.get('contact_email')
+        notices = request.POST.get('notices')
         # date_start = request.POST.get('date_start')
         # date_end = request.POST.get('date_end')
         flag = Flag.objects.get(code=flag_code)
@@ -163,10 +164,10 @@ def free_place(request, date_start, date_end, place=None, **kwargs):
         place = Place.objects.get(pk=int(place_id))
         type = request.POST.get('type')
         if type == "stay":
-            stay = Stay(place=place, ship=ship, date_start=date_start, date_end=date_end, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email)
+            stay = Stay(place=place, ship=ship, date_start=date_start, date_end=date_end, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email, notices=notices)
             stay.save()
         elif type == "resident":
-            contract = Contract(place=place, ship=ship, date_start=date_start, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email)
+            contract = Contract(place=place, ship=ship, date_start=date_start, contact_name=contact_name, contact_phone=contact_phone, contact_email=contact_email, notices=notices)
             contract.save()
         return place_state(request, _id=place_id, **kwargs)
     elif place:
