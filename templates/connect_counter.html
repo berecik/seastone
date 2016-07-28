@@ -15,8 +15,8 @@
         <div class="row">
         <select name="place_id" class="serial">
         <option>Wybierz miejsce:</option>
-            {% for place in places %}
-            <option value="{{ place.id }}">{{ place }}</option>
+            {% for place, occupation in places %}
+            <option value="{{ place.id }}">{{ place }} {{ occupation.ship }}</option>
             {% endfor %}
         </select>
         </div>

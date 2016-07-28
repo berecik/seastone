@@ -143,6 +143,7 @@ class Occupation(models.Model):
     contact_name = models.CharField(max_length=1024, db_index=True, null=True, blank=True)
     contact_phone = models.CharField(max_length=64, db_index=True, null=True, blank=True)
     contact_email = models.CharField(max_length=64, db_index=True, null=True, blank=True)
+    notices = models.TextField(default="")
 
     class Meta:
         abstract = True
@@ -165,7 +166,7 @@ class Stay(Occupation):
 class Contract(Occupation):
 
     @property
-    def current_contract(self):
+    def current_connector(self):
         connection = Connection.objects.filter(contract=self)
         if connection:
             connector = connection[0].connector

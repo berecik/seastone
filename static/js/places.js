@@ -28,7 +28,7 @@ function _unbind(item) {
 }
 
 
-function _draw(item, color, style){
+function _set_style(item, color, style){
     var _style = {
         color: 'blue',
         fillColor: 'blue',
@@ -42,7 +42,16 @@ function _draw(item, color, style){
         _style.fillColor = color;
     }
     item.icon.setStyle(_style);
+}
+
+function _draw(item, color, style){
+    _set_style(item, color, style);
     item.icon.addTo(map);
+}
+
+function _redraw(item, color, style){
+    _set_style(item, color, style);
+    item.icon.redraw();
 }
 
 function _draw_place(item, color){
@@ -132,7 +141,21 @@ function draw_all() {
 }
 
 function refresh() {
-    draw_all();
+    $.each(data, function (state) {
+        // if($('[name="show_'+state+'"]').is(':checked')) {
+        var color = STATE_COLORS[state];
+        var ids = data[state];
+        for (i in ids) {
+            var id = ids[i];
+            var item = places[id];
+            _redraw(item, color);
+            item.icon.clearAllEventListeners();
+            // item.icon.on('click', function(id, item){
+            //     $.get(get_url(null, 'place_state='+id), create_popup.bind(null, id, item));
+            // }.bind(null, id, item));
+        }
+        // }
+    })
 }
 
 function create_popup(_id, item, content) {

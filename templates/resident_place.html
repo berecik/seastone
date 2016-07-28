@@ -14,6 +14,9 @@
            {% if resident.contact_phone %}telefon:{{ resident.contact_phone }}{% endif %}
            {% if resident.contact_email %}email: <a href="mailto:{{ resident.contact_email }}">{{ resident.contact_email }}</a> {% endif %}
        {% endif %}
+        {% if resident.notices %}
+            <div>{{ notices }}</div>
+        {% endif %}
        <button id="remove_contract_{{ resident.pk }}">Usuń</button>
        <ul>
            {% for leave in leaves %}

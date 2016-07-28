@@ -286,14 +286,19 @@ def connect_counter(request, _id, **kwargs):
             return hub_state(request, _id=hub_id, **kwargs)
         place_id = None
 
-
     if not place_id:
         place_models = Place.objects.filter(pier=connector.hub.pier)
         places = []
-        for place_model in place_models:
-            state = place_model.state(date_start=date.today(), date_end=date.today())
-            if state == "resident" or state == "booked":
-                places.append(place_model)
+        for place in place_models:
+            state = place.state(date_start=date.today(), date_end=date.today())
+            if state == "resident":
+                contract = place.resident(date_start=date.today(), date_end=date.today())[0][0]
+                if not contract.current_connector:
+                    places.append((place, contract))
+            elif state == "booked":
+                stay = place.ships(date_start=date.today(), date_end=date.today())[0]
+                if not stay.current_connector:
+                    places.append((place, stay))
         _context = {
             "connector": connector,
             "places": places,

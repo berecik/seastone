@@ -14,6 +14,9 @@
            {% if stay.contact_phone %}telefon:{{ stay.contact_phone }}{% endif %}
            {% if stay.contact_email %}email: <a href="mailto:{{ stay.contact_email }}">{{ stay.contact_email }}</a> {% endif %}
        {% endif %}
+       {% if resident.notices %}
+            <div>{{ notices }}</div>
+        {% endif %}
        <button id="remove_stay_{{ stay.pk }}">Usuń</button>
     </li>
 {% endfor %}

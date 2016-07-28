@@ -219,8 +219,8 @@
             {% endfor %}
             {#            draw_places();#}
             {#            draw_hubs();#}
-            $(".refresh_change").change(refresh);
-            $(".refresh_click").click(refresh);
+            $(".refresh_change").change(draw_all);
+            $(".refresh_click").click(draw_all);
             draw_all();
         });
 
