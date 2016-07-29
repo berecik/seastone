@@ -141,21 +141,23 @@ function draw_all() {
 }
 
 function refresh() {
-    $.each(data, function (state) {
-        // if($('[name="show_'+state+'"]').is(':checked')) {
-        var color = STATE_COLORS[state];
-        var ids = data[state];
-        for (i in ids) {
-            var id = ids[i];
-            var item = places[id];
-            _redraw(item, color);
-            item.icon.clearAllEventListeners();
-            // item.icon.on('click', function(id, item){
-            //     $.get(get_url(null, 'place_state='+id), create_popup.bind(null, id, item));
-            // }.bind(null, id, item));
-        }
-        // }
-    })
+    $.get(get_url(null, 'get_places'), function (data) {
+        $.each(data, function (state) {
+            // if($('[name="show_'+state+'"]').is(':checked')) {
+            var color = STATE_COLORS[state];
+            var ids = data[state];
+            for (i in ids) {
+                var id = ids[i];
+                var item = places[id];
+                _redraw(item, color);
+                item.icon.clearAllEventListeners();
+                // item.icon.on('click', function(id, item){
+                //     $.get(get_url(null, 'place_state='+id), create_popup.bind(null, id, item));
+                // }.bind(null, id, item));
+            }
+            // }
+        });
+    });
 }
 
 function create_popup(_id, item, content) {
