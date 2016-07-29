@@ -96,11 +96,16 @@ STATE_COLORS = {
 ITEMS_DISPLAY = {
     "show_hubs": draw_hubs,
     "show_ybooms": draw_yboms,
-    "show_piers": draw_piers
+    // "show_piers": draw_piers
 };
 
 
-ITEMS_LISTS = [hubs, places, piers, yboms]
+ITEMS_LISTS = [
+    hubs,
+    places,
+    // piers,
+    yboms
+];
 
 
 function draw_all() {
@@ -135,9 +140,9 @@ function draw_all() {
             }
         })
     });
-    for (var _i in ITEMS_LISTS) {
-        _places(ITEMS_LISTS[_i], _unbind)();
-    }
+    // for (var _i in ITEMS_LISTS) {
+    //     _places(ITEMS_LISTS[_i], _unbind)();
+    // }
 }
 
 function refresh() {
@@ -150,7 +155,7 @@ function refresh() {
                 var id = ids[i];
                 var item = places[id];
                 _redraw(item, color);
-                item.icon.clearAllEventListeners();
+                // item.icon.clearAllEventListeners();
                 // item.icon.on('click', function(id, item){
                 //     $.get(get_url(null, 'place_state='+id), create_popup.bind(null, id, item));
                 // }.bind(null, id, item));
