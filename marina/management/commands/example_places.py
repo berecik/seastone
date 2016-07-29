@@ -179,7 +179,7 @@ def _gen_marina(marina):
             order += 1
             for i in range(1, 9):
                 print "\t\t\t\t%s%sE%s" % (pirs, hi, i)
-                co = Connector(hub=ho, name="%s%sE%s" % (pirs, hi, i))
+                co = Connector(hub=ho, name="%s" % i)
                 co.save()
             hi -= 1
         while li > le or ri < re:
