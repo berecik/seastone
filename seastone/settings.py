@@ -38,7 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     # third part applications
     'django_extensions',
-    'mptt',
+    # 'mptt',
     # 'djangular',
     'watson',
     'debug_toolbar',

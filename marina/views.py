@@ -1,6 +1,8 @@
 #!/usr/bin/python
 # -*- coding: utf-8 -*-
 
+from django.utils.translation import ugettext_lazy as _
+
 import json
 from datetime import date
 
@@ -12,7 +14,7 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 from utils.tools import iso_to_py_date, py_to_iso_date, iso2js
 from utils.decorators import parse_args, json_response, check_action, template_response
 
-from tools import pl_to_py_date
+from utils.tools import pl_to_py_date
 from .models import Stay, Ship, Pier, Place, Flag, Marina, Hub, Connector, Contract, Leave, YBom
 from .data import get_places, get_ships
 

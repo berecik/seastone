@@ -1,4 +1,5 @@
 {% extends 'place_state.html' %}
+{% load i18n %}
 {% block script %}
 {% for stay in ships %}
     $("#remove_stay_{{ stay.pk }}").click(set_action.bind(null, {{ place_id }}, "remove_stay", {{ stay.pk }}));
@@ -10,14 +11,14 @@
    <li>{{ stay.ship }}: od {{ stay.date_start }} do {{ stay.date_end }}
        {% if stay.contact_name or  stay.contact_phone or stay.contact_email %}
        <br>
-           Kontakt: {{ stay.contact_name }}
-           {% if stay.contact_phone %}telefon:{{ stay.contact_phone }}{% endif %}
-           {% if stay.contact_email %}email: <a href="mailto:{{ stay.contact_email }}">{{ stay.contact_email }}</a> {% endif %}
+           {% trans 'Kontakt:' %} {{ stay.contact_name }}
+           {% if stay.contact_phone %}{% trans 'telefon:' %}{{ stay.contact_phone }}{% endif %}
+           {% if stay.contact_email %}{% trans 'email:' %} <a href="mailto:{{ stay.contact_email }}">{{ stay.contact_email }}</a> {% endif %}
        {% endif %}
        {% if resident.notices %}
             <div>{{ notices }}</div>
         {% endif %}
-       <button id="remove_stay_{{ stay.pk }}">Usuń</button>
+       <button id="remove_stay_{{ stay.pk }}">{% trans 'Usuń' %}</button>
     </li>
 {% endfor %}
 </ul>

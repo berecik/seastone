@@ -1,3 +1,4 @@
+{% load i18n %}
 <textarea id="_call_{{ hub_id }}" >
     var hub_id = {{ hub_id }};
     $("#close_hub_{{ hub_id }}").click(function(){close_hub_popup({{ hub_id }})});
@@ -14,14 +15,14 @@
 {#    <ul>#}
         <div class="row">
         <select name="place_id" class="serial">
-        <option>Wybierz miejsce:</option>
+        <option>{% trans 'Wybierz miejsce:' %}</option>
             {% for place, occupation in places %}
             <option value="{{ place.id }}">{{ place }} {{ occupation.ship }}</option>
             {% endfor %}
         </select>
         </div>
         <div class="row">
-            Licznik: <input type="number" name="counter" value="{{ connector.counter }}" class="serial">
+            {% trans 'Licznik:' %} <input type="number" name="counter" value="{{ connector.counter }}" class="serial">
         </div>
 {#    </ul>#}
     {% endblock form%}
@@ -30,7 +31,7 @@
             {% block submit %}
                 <button id="save_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz{% endblock submit_text %}</button>
             {% endblock submit %}
-            <button id="close_hub_{{ hub_id }}" class="pull-right">Zamknij</button>
+            <button id="close_hub_{{ hub_id }}" class="pull-right">{% trans 'Zamknij' %}</button>
         {% endblock buttons %}
     </fieldset>
 </div>

@@ -1,4 +1,5 @@
 {% extends 'place_state.html' %}
+{% load i18n %}
 {% block edit_button %}{% endblock edit_button %}
 {% block script %}
     edit_place({{ place_id }});
@@ -8,13 +9,13 @@
         <fieldset>
             {% csrf_token %}
             <input type="hidden" name="edit_place_id" value="{{ place_id }}">
-            <label for="name" class="">Nazwa:</label>
+            <label for="name" class="">{% trans 'Nazwa:' %}</label>
             <input type="text" name="name" id="name_{{ place_id }}" value="{{ name }}" class="text ui-widget-content ui-corner-all number">
             <hr>
-            <label for="min_length" class="">Długość minimalna</label>
+            <label for="min_length" class="">{% trans 'Długość minimalna' %}</label>
             <input type="text" name="min_length" id="min_length_{{ place_id }}" value="{{ min_length }}" class="text ui-widget-content ui-corner-all number">
             <hr>
-            <label for="max_length" class="">Długość maksymalna</label>
+            <label for="max_length" class="">{% trans 'Długość maksymalna' %}</label>
             <input type="text" name="max_length" id="max_length_{{ place_id }}" value="{{ max_length }}" class="text ui-widget-content ui-corner-all number">
         </fieldset>
         <hr>

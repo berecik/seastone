@@ -5,7 +5,7 @@ except ImportError:  # django < 1.4
 
 from .views import settings_js
 
-urlpatterns = patterns('',
+urlpatterns = [
     # javascript settings
     url(r'settings\.js', settings_js, name='js_settings'),
-)
+]

@@ -1,3 +1,4 @@
+{% load i18n %}
 <textarea id="_call_{{ hub_id }}" >
     var hub_id = {{ hub_id }};
     $("#close_hub_{{ hub_id }}").click(function(){close_hub_popup({{ hub_id }})});
@@ -19,7 +20,7 @@
 {#    <ul>#}
         {% for connector in connectors %}
             <div class="row">
-                {{ connector.name }}: {% if not connector.conected %}<button id="connect_{{ connector.id }}">Podłącz jacht</button>{% else %} {{ connector.current_place }} {{ connector.current_ship }}{% endif %} Licznik: <input type="number" name="counter_{{ connector.id }}" value="{{ connector.counter }}" class="serial">
+                {{ connector.name }}: {% if not connector.conected %}<button id="connect_{{ connector.id }}">{% trans 'Podłącz jacht' %}</button>{% else %} {{ connector.current_place }} {{ connector.current_ship }}{% endif %} {% trans 'Licznik:' %} <input type="number" name="counter_{{ connector.id }}" value="{{ connector.counter }}" class="serial">
             </div>
         {% endfor %}
 {#    </ul>#}
@@ -27,9 +28,9 @@
     <fieldset>
         {% block buttons %}
             {% block submit %}
-                <button id="save_counters_{{ hub_id }}" class="pull-left">{% block submit_text %}Zapisz liczniki{% endblock submit_text %}</button>
+                <button id="save_counters_{{ hub_id }}" class="pull-left">{% block submit_text %}{% trans 'Zapisz liczniki' %}{% endblock submit_text %}</button>
             {% endblock submit %}
-            <button id="close_hub_{{ hub_id }}" class="pull-right">Zamknij</button>
+            <button id="close_hub_{{ hub_id }}" class="pull-right">{% trans 'Zamknij' %}</button>
         {% endblock buttons %}
     </fieldset>
 </div>

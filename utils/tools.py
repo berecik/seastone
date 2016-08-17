@@ -16,6 +16,7 @@ except:
     QUERY_DEBUG = True
     DEBUG_FILE = os.path.join(DJANGO_PATH, '_debug_log.txt')
 
+SETTINGS_PATH = "seastone"
 
 _cout = True
 _pp = pprint.PrettyPrinter(indent=2)
@@ -111,7 +112,7 @@ def del_key(dict, key):
     return False
 
 
-class TbDebug:
+class BeretDebug:
     def __init__(self,
             value = None,
             label="DEBUG",
@@ -156,8 +157,8 @@ class TbDebug:
         return self.show()
 
 
-def tb_debug(*args, **kwargs):
-    return TbDebug(*args, **kwargs).show()
+def _debug(*args, **kwargs):
+    return BeretDebug(*args, **kwargs).show()
 
 
 def env(fun):
@@ -165,9 +166,28 @@ def env(fun):
         import os
         import sys
 
-        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tb.settings")
+        os.environ.setdefault("DJANGO_SETTINGS_MODULE", "%s.settings" % SETTINGS_PATH)
         sys.path.append(DJANGO_PATH)
 
         return fun(*args, **kwargs)
 
     return _fun_wrap
+
+def iso_to_py_date(txt_date):
+    return date(*map(int, txt_date.split('-')))
+
+def pl_to_py_date(txt_date):
+    l = map(int, txt_date.split('.'))
+    l.reverse()
+    return date(*l)
+
+def py_to_iso_date(date):
+    return "-".join(map(str,[date.year, date.month, date.day]))
+
+
+def to_js_date(py_date):
+    return int(calendar.timegm(py_date.timetuple())) * 1000
+
+
+def iso2js(iso_date):
+    return to_js_date(iso_to_py_date(iso_date))

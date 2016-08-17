@@ -1,4 +1,5 @@
 {% extends 'place_state.html' %}
+{% load i18n %}
 {% block script %}
 {% endblock script %}
 {% block edit_button %}{% endblock edit_button %}
@@ -6,16 +7,16 @@
     edit_stay({{ stay_id }});
 {% endblock script %}
 {% block form %}
-    <h5>Zwolnienie miejsca</h5>
-    <b>Miejsce będzie do dyspozycji mariny:</b>
+    <h5>{% trans 'Zwolnienie miejsca' %}</h5>
+    <b>{% trans 'Miejsce będzie do dyspozycji mariny:' %}</b>
     <form method="post" id="form_{{ place_id }}" onsubmit="return false;">
         <fieldset>
-            <label for="email" class="">Data Od</label>
+            <label for="email" class="">{% trans 'Data Od' %}</label>
             <input type="text" class="date" name="date_start" id="date_start_{{ place_id }}">
-            <label for="email" class="" id="">Data Do</label>
+            <label for="email" class="" id="">{% trans 'Data Do' %}</label>
             <input type="text" class="date" name="date_end" id="date_end_{{ place_id }}">
         </fieldset>
         <hr>
     </form>
 {% endblock form %}
-{% block submit_text %}Zwolnij miejsce{% endblock submit_text %}
+{% block submit_text %}{% trans 'Zwolnij miejsce' %}{% endblock submit_text %}

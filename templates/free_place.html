@@ -1,4 +1,5 @@
 {% extends 'place_state.html' %}
+{% load i18n %}
 {% block script %}
     set_stay({{ place_id }});
 {% endblock script %}
@@ -8,24 +9,24 @@
             {% csrf_token %}
             <input type="hidden" name="ship_id" id="ship_id_{{ place_id }}" value="">
             <input type="hidden" name="place_id" value="{{ place_id }}">
-            <label for="ship_name" class="">Jacht</label>
+            <label for="ship_name" class="">{% trans 'Jacht' %}</label>
             <input type="text" name="ship_name" id="ship_select_{{ place_id }}" value="" class="text ui-widget-content ui-corner-all ship_fields">
-            <label for="length" class="">Długość</label>
+            <label for="length" class="">{% trans 'Długość' %}</label>
             <input type="text" name="length" id="ship_length_{{ place_id }}" value="" class="text ui-widget-content ui-corner-all number ship_val ship_fields">
             <select name="flag" id="ship_flag_{{ place_id }}" class="ship_fields">
-                <option>wybierz flagę...</option>
-                <option value="pl">Polska</option>
-                <option value="de">Niemcy</option>
-                <option value="se">Szwecja</option>
-                <option value="dk">Dania</option>
-                <option value="nl">Holandia</option>
-                <option value="no">Norwegia</option>
-                <option value="fr">Francja</option>
-                <option value="be">Belgia</option>
-                <option value="fi">Finlandia</option>
-                <option value="cz">Czechy</option>
-                <option value="gb">Wielka Brytania</option>
-                <option value="us">USA</option>
+                <option>{% trans 'wybierz flagę...' %}</option>
+{#                <option value="pl">Polska</option>#}
+{#                <option value="de">Niemcy</option>#}
+{#                <option value="se">Szwecja</option>#}
+{#                <option value="dk">Dania</option>#}
+{#                <option value="nl">Holandia</option>#}
+{#                <option value="no">Norwegia</option>#}
+{#                <option value="fr">Francja</option>#}
+{#                <option value="be">Belgia</option>#}
+{#                <option value="fi">Finlandia</option>#}
+{#                <option value="cz">Czechy</option>#}
+{#                <option value="gb">Wielka Brytania</option>#}
+{#                <option value="us">USA</option>#}
                 {% for flag in flags %}
                     <option value="{{ flag.code }}">{{ flag.name }}</option>
                 {% endfor %}
@@ -34,34 +35,34 @@
         </fieldset>
         <hr>
         <fieldset>
-            <label for="type" class="">Rodzaj postoju: </label>
-            <span>Postój<input type="radio" name="type" id="type_stay_{{ place_id }}" value="stay" class="ui-widget-content ui-corner-all" checked></span>
-            <span >Rezydent<input type="radio" name="type" id="type_resident_{{ place_id }}" value="resident" class="ui-widget-content ui-corner-all"></span>
+            <label for="type" class="">{% trans 'Rodzaj postoju:' %} </label>
+            <span>{% trans 'Postój' %}<input type="radio" name="type" id="type_stay_{{ place_id }}" value="stay" class="ui-widget-content ui-corner-all" checked></span>
+            <span >{% trans 'Rezydent' %}<input type="radio" name="type" id="type_resident_{{ place_id }}" value="resident" class="ui-widget-content ui-corner-all"></span>
         </fieldset>
         <hr>
         <fieldset>
-            <label for="contact_name_{{ place_id }}" class="">Kontakt:</label>
+            <label for="contact_name_{{ place_id }}" class="">{% trans 'Kontakt:' %}</label>
             <input type="text" name="contact_name" id="contact_name_{{ place_id }}" value="">
-            <label for="contact_phone_{{ place_id }}" class="">Telefon:</label>
+            <label for="contact_phone_{{ place_id }}" class="">{% trans 'Telefon:' %}</label>
             <input type="text" name="contact_phone" id="contact_phone_{{ place_id }}" value="">
-            <label for="contact_email_{{ place_id }}" class="">Email:</label>
+            <label for="contact_email_{{ place_id }}" class="">{% trans 'Email:' %}</label>
             <input type="text" name="contact_email" id="contact_email_{{ place_id }}" value="">
         </fieldset>
         <hr>
         <fieldset>
-            <label for="notices">Uwagi:</label>
+            <label for="notices">{% trans 'Uwagi:' %}</label>
             <textarea name="notices" id="notices"></textarea>
         </fieldset>
         <hr>
         <fieldset>
-            <label for="email" class="">Data Od</label>
+            <label for="email" class="">{% trans 'Data Od' %}</label>
             <input type="text" class="date" name="date_start" id="date_start_{{ place_id }}">
             <span id="date_end_span_{{ place_id }}">
-                <label for="email" class="date_end_{{ place_id }}" id="">Data Do</label>
+                <label for="email" class="date_end_{{ place_id }}" id="">{% trans 'Data Do' %}</label>
                 <input type="text" class="date" name="date_end" class="date_end_{{ place_id }}" id="date_end_{{ place_id }}">
             </span>
         </fieldset>
         <hr>
     </form>
 {% endblock form %}
-{% block submit_text %}Dodaj postój{% endblock submit_text %}
+{% block submit_text %}{% trans 'Dodaj postój' %}{% endblock submit_text %}

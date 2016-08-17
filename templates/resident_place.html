@@ -1,4 +1,5 @@
 {% extends 'place_state.html' %}
+{% load i18n %}
 {% block script %}
 {% for resident, leaves in residents %}
     $("#remove_contract_{{ resident.pk }}").click(set_action.bind(null, {{ place_id }}, "remove_contract", {{ resident.pk }}));
@@ -7,17 +8,17 @@
 {% block form %}
 <ul>
 {% for resident, leaves in residents %}
-   <li>{{ resident.ship }}: od {{ resident.date_start }}{% if resident.date_end %} do {{ resident.date_end }}{% endif %}
+   <li>{{ resident.ship }}: {% trans 'od' %} {{ resident.date_start }}{% if resident.date_end %} {% trans 'do' %} {{ resident.date_end }}{% endif %}
        {% if resident.contact_name or  resident.contact_phone or resident.contact_email %}
        <br>
-           Kontakt: {{ resident.contact_name }}
-           {% if resident.contact_phone %}telefon:{{ resident.contact_phone }}{% endif %}
-           {% if resident.contact_email %}email: <a href="mailto:{{ resident.contact_email }}">{{ resident.contact_email }}</a> {% endif %}
+           {% trans 'Kontakt:' %} {{ resident.contact_name }}
+           {% if resident.contact_phone %}{% trans 'telefon:' %}{{ resident.contact_phone }}{% endif %}
+           {% if resident.contact_email %}{% trans 'email:' %} <a href="mailto:{{ resident.contact_email }}">{{ resident.contact_email }}</a> {% endif %}
        {% endif %}
         {% if resident.notices %}
             <div>{{ notices }}</div>
         {% endif %}
-       <button id="remove_contract_{{ resident.pk }}">Usuń</button>
+       <button id="remove_contract_{{ resident.pk }}">{% trans 'Usuń' %}</button>
        <ul>
            {% for leave in leaves %}
                
