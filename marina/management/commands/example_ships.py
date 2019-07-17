@@ -53,7 +53,7 @@ ships_examples = [
         "flag": 'fi'
     },
     {
-        "name": 'Szwejk',
+        "name": 'Panzer Szwejk',
         "length": '19.14',
         "flag": 'cz'
     },
@@ -63,7 +63,7 @@ ships_examples = [
         "flag": 'gb'
     },
     {
-        "name": 'Enterprise',
+        "name": 'USS Enterprise',
         "length": '330',
         "flag": 'us'
     }

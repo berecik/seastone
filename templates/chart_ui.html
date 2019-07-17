@@ -4,11 +4,11 @@
 {% block scripts %}
     {{ block.super }}
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css" />
-    <script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"></script>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.12.0/themes/base/jquery-ui.css">
-{#    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>#}
-{#    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>#}
+    <link rel="stylesheet" href="{% static 'leaflet/leaflet.css' %}" />
+    <script src="{% static 'leaflet/leaflet.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'jquery-ui/jquery-ui.css' %}">
+    {#    <script src="https://code.jquery.com/jquery-1.12.4.js"></script>#}
+    {#    <script src="https://code.jquery.com/ui/1.12.0/jquery-ui.js"></script>#}
     <script src="{% static 'js/places.js' %}"></script>
     <style>
         #mapid { height: 800px; }
@@ -57,7 +57,7 @@
             }).setView([53.9747, 14.769], 18);
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoiYmVyZXQiLCJhIjoiY2lwM3I3NHVzMDAxendibHlybTNvbWZ5eSJ9.QeqzTkthT-iHFe6z9WZiuA', {
                 maxZoom: 22,
-                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> SeaStone Marina Manager © Adam Mańczuk, inspiration Mariusz Palenica',
+                attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> SeaStone Marina Manager © Adam Mańczuk, inspiration by Mariusz Palenica',
                 id: 'mapbox.streets'
             }).addTo(map);
 
@@ -168,19 +168,6 @@
                         if(_li){
                             _li_yb = _li+1;
                         }
-                        {#                         console.log(#}
-                        {#                            _xb - (_xpn * (_li * 6)) - _ymi_yb,#}
-                        {#                            _yb - (_ypn * (_li * 6)) - _xmi_yb);#}
-                        {#                         console.log(#}
-                        {#                            _xb - (_xpn * (_li * 6)) - _ymj_yb,#}
-                        {#                            _yb - (_ypn * (_li * 6)) - _xmj_yb);#}
-                        {#                         console.log(#}
-                        {#                            _xb - (_xpn * (_li * 6)) + _ymi_yb,#}
-                        {#                            _yb - (_ypn * (_li * 6)) + _xmi_yb);#}
-                        {#                         console.log(#}
-                        {#                            _xb - (_xpn * (_li * 6)) + _ymj_yb,#}
-                        {#                            _yb - (_ypn * (_li * 6)) + _xmj_yb);#}
-                        {#                        console.log("=====");#}
                         ybom = {
                             id: {{ item.id }},
                             {% if item.left %}
@@ -255,4 +242,16 @@
         </form>
     </div>
     <div id="mapid"></div>
+
+    <!-- Hotjar Tracking Code for hipisi.org.pl -->
+    <script>
+        (function(h,o,t,j,a,r){
+            h.hj=h.hj||function(){(h.hj.q=h.hj.q||[]).push(arguments)};
+            h._hjSettings={hjid:343444,hjsv:5};
+            a=o.getElementsByTagName('head')[0];
+            r=o.createElement('script');r.async=1;
+            r.src=t+h._hjSettings.hjid+j+h._hjSettings.hjsv;
+            a.appendChild(r);
+        })(window,document,'//static.hotjar.com/c/hotjar-','.js?sv=');
+    </script>
 {% endblock content %}

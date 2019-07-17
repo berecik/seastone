@@ -1,1 +1,1 @@
-jquery-2.2.3.js
+/home/beret/dev/seastone/static/jquery/jquery-2.2.3.js

@@ -9,14 +9,12 @@ from datetime import datetime, date
 try:
     from django.conf import settings
     DEBUG_FILE = settings.DEBUG_FILE
-    DJANGO_PATH = settings.DJANGO_PATH
     QUERY_DEBUG = settings.QUERY_DEBUG
 except:
-    DJANGO_PATH = os.path.abspath(__file__)
     QUERY_DEBUG = True
-    DEBUG_FILE = os.path.join(DJANGO_PATH, '_debug_log.txt')
+    DEBUG_FILE = os.path.join(settings.BASE_DIR, '_debug_log.txt')
 
-SETTINGS_PATH = "seastone"
+
 
 _cout = True
 _pp = pprint.PrettyPrinter(indent=2)
@@ -165,21 +163,24 @@ def env(fun):
     def _fun_wrap(*args, **kwargs):
         import os
         import sys
-
+        SETTINGS_PATH = "seastone"
         os.environ.setdefault("DJANGO_SETTINGS_MODULE", "%s.settings" % SETTINGS_PATH)
-        sys.path.append(DJANGO_PATH)
+        sys.path.append(settings.BASE_DIR)
 
         return fun(*args, **kwargs)
 
     return _fun_wrap
 
+
 def iso_to_py_date(txt_date):
     return date(*map(int, txt_date.split('-')))
+
 
 def pl_to_py_date(txt_date):
     l = map(int, txt_date.split('.'))
     l.reverse()
     return date(*l)
+
 
 def py_to_iso_date(date):
     return "-".join(map(str,[date.year, date.month, date.day]))

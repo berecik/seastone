@@ -5,8 +5,8 @@ django-extensions # for improve command line commands and debugging
 Werkzeug # deploy helper, we not need this yet, provide also onsite debuger and this is nice
 django-mptt # to represent and manage hierarchical data structures
 
-django-debug-toolbar
-watson
+# django-debug-toolbar
+# watson
 djangorestframework # Django support for rest
 markdown        # Markdown support for the browsable API.
 django-filter   # Filtering support
@@ -18,7 +18,7 @@ django-bower    # Mange js applications
 # git+https://github.com/django-nonrel/djangotoolbox
 # git+https://github.com/django-nonrel/mongodb-engine
 # Django kit for couchdb
-couchdbkit
+# couchdbkit
 
 # Deploy on production
 uwsgi

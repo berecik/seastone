@@ -40,13 +40,13 @@ INSTALLED_APPS = [
     'django_extensions',
     # 'mptt',
     # 'djangular',
-    'watson',
+    # 'watson',
     'debug_toolbar',
     # rest framework
     'rest_framework',
     'crispy_forms',
     # for a social login
-    'social.apps.django_app.default',
+    # 'social.apps.django_app.default',
     # custom common tools
     'utils',
     # custom applications
@@ -96,8 +96,8 @@ DATABASES = {
     'default': {
         'ENGINE':   'django.db.backends.postgresql',
         'NAME':     'seastone',
-        'PASSWORD': '6649beret',
-        'USER':     'beret',
+        'PASSWORD': 'some_password',
+        'USER':     'some_user',
         'HOST':     'localhost',
     }
 }
