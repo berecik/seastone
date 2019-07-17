@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     # 'mptt',
     # 'djangular',
     # 'watson',
-    'debug_toolbar',
+    # 'debug_toolbar',
     # rest framework
     'rest_framework',
     'crispy_forms',
