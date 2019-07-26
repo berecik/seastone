@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-07-23 18:53+0000\n"
+"POT-Creation-Date: 2019-07-23 18:54+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -16,173 +16,171 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n==1 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 "
-"|| n%100>=20) ? 1 : 2);\n"
 
 #: templates/add_leave.html:8
 msgid "Zwolnienie miejsca"
-msgstr ""
+msgstr "Releasing the berth"
 
 #: templates/add_leave.html:9
 msgid "Miejsce będzie do dyspozycji mariny:"
-msgstr ""
+msgstr "The berth will be manage by marina:"
 
 #: templates/add_leave.html:12 templates/edit_stay.html:10
 #: templates/free_place.html:58
 msgid "Data Od"
-msgstr ""
+msgstr "Date from"
 
 #: templates/add_leave.html:14 templates/edit_stay.html:13
 #: templates/free_place.html:61
 msgid "Data Do"
-msgstr ""
+msgstr "Date to"
 
 #: templates/add_leave.html:20
 msgid "Zwolnij miejsce"
-msgstr ""
+msgstr "Release the berth"
 
 #: templates/booked_place.html:14 templates/free_place.html:44
 #: templates/resident_place.html:14
 msgid "Kontakt:"
-msgstr ""
+msgstr "Contact"
 
 #: templates/booked_place.html:15 templates/resident_place.html:15
 msgid "telefon:"
-msgstr ""
+msgstr "phone"
 
 #: templates/booked_place.html:16 templates/resident_place.html:16
 msgid "email:"
-msgstr ""
+msgstr "email"
 
 #: templates/booked_place.html:21 templates/resident_place.html:21
 msgid "Usuń"
-msgstr ""
+msgstr "Delete"
 
 #: templates/chart_ui.html:222
 msgid "Długość:"
-msgstr ""
+msgstr "Length"
 
 #: templates/chart_ui.html:224
 msgid "Data Od:"
-msgstr ""
+msgstr "Date From"
 
 #: templates/chart_ui.html:226
 msgid "Do:"
-msgstr ""
+msgstr "To"
 
 #: templates/chart_ui.html:229
 msgid "Wolne"
-msgstr ""
+msgstr "Free"
 
 #: templates/chart_ui.html:231
 msgid "Zajete"
-msgstr ""
+msgstr "Occupied"
 
 #: templates/chart_ui.html:233
 msgid "Rezydenci"
-msgstr ""
+msgstr "Residents"
 
 #: templates/chart_ui.html:235
 msgid "Postumenty"
-msgstr ""
+msgstr "Service points"
 
 #: templates/chart_ui.html:237
 msgid "Y-Bomy"
-msgstr ""
+msgstr "Y-Booms"
 
 #: templates/connect_counter.html:18
 msgid "Wybierz miejsce:"
-msgstr ""
+msgstr "Choose your berth"
 
 #: templates/connect_counter.html:25 templates/hub.html:23
 msgid "Licznik:"
-msgstr ""
+msgstr "Meter"
 
 #: templates/connect_counter.html:34 templates/hub.html:33
 #: templates/place_state.html:22
 msgid "Zamknij"
-msgstr ""
+msgstr "Close"
 
 #: templates/edit_place.html:12
 msgid "Nazwa:"
-msgstr ""
+msgstr "Name"
 
 #: templates/edit_place.html:15
 msgid "Długość minimalna"
-msgstr ""
+msgstr "Minimum Length"
 
 #: templates/edit_place.html:18
 msgid "Długość maksymalna"
-msgstr ""
+msgstr "Maximum Length"
 
 #: templates/free_place.html:12
 msgid "Jacht"
-msgstr ""
+msgstr "Boat"
 
 #: templates/free_place.html:14
 msgid "Długość"
-msgstr ""
+msgstr "Length"
 
 #: templates/free_place.html:17
 msgid "wybierz flagę..."
-msgstr ""
+msgstr "Choose a flag"
 
 #: templates/free_place.html:38
 msgid "Rodzaj postoju:"
-msgstr ""
+msgstr "Type of layover"
 
 #: templates/free_place.html:39
 msgid "Postój"
-msgstr ""
+msgstr "Layover"
 
 #: templates/free_place.html:40
 msgid "Rezydent"
-msgstr ""
+msgstr "Resident"
 
 #: templates/free_place.html:46
 msgid "Telefon:"
-msgstr ""
+msgstr "Phone"
 
 #: templates/free_place.html:48
 msgid "Email:"
-msgstr ""
+msgstr "Email"
 
 #: templates/free_place.html:53
 msgid "Uwagi:"
-msgstr ""
+msgstr "Comments"
 
 #: templates/free_place.html:68 templates/place_state.html:14
 msgid "Dodaj postój"
-msgstr ""
+msgstr "Add layover"
 
 #: templates/hub.html:23
 msgid "Podłącz jacht"
-msgstr ""
+msgstr "Connect boat"
 
 #: templates/hub.html:31
 msgid "Zapisz liczniki"
-msgstr ""
+msgstr "Save the meter status"
 
 #: templates/place_state.html:10
 msgid "Miejsce postojowe"
-msgstr ""
+msgstr "Berth"
 
 #: templates/place_state.html:10
 msgid "metrów"
-msgstr ""
+msgstr "meters"
 
 #: templates/place_state.html:11
 msgid "Edytuj miejsce postojowe"
-msgstr ""
+msgstr "Edit berth"
 
 #: templates/place_state.html:20
 msgid "Zapisz"
-msgstr ""
+msgstr "Save"
 
 #: templates/resident_place.html:11
 msgid "od"
-msgstr ""
+msgstr "from"
 
 #: templates/resident_place.html:11
 msgid "do"
-msgstr ""
+msgstr "to"

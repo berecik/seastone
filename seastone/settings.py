@@ -24,7 +24,7 @@ SECRET_KEY = '2qh0vq&x#8pidvn5ni_2z+-!w*9c^e-@e6j_dtbfn3@ud5#tax'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
-ALLOWED_HOSTS = ['hipisi.org.pl', 'localhost', 'seastar', '127.0.0.1']
+ALLOWED_HOSTS = []
 
 
 # Application definition
