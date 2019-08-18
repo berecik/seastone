@@ -15,7 +15,7 @@
 {#    <ul>#}
         <div class="row">
         <select name="place_id" class="serial">
-        <option>{% trans 'Wybierz miejsce:' %}</option>
+        <option>{% trans 'Choose your berth' %}</option>
             {% for place, occupation in places %}
             <option value="{{ place.id }}">{{ place }} {{ occupation.ship }}</option>
             {% endfor %}

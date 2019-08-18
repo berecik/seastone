@@ -5,8 +5,8 @@
     edit_stay({{ stay_id }});
 {% endblock script %}
 {% block form %}
-    <h5>{% trans 'Zwolnienie miejsca' %}</h5>
-    <b>{% trans 'Miejsce będzie do dyspozycji mariny:' %}</b>
+    <h5>{% trans 'Releasing the berth' %}</h5>
+    <b>{% trans 'The berth will be manage by marina:' %}</b>
     <form method="post" id="form_{{ place_id }}" onsubmit="return false;">
         <fieldset>
             <label for="email" class="">{% trans 'Data Od' %}</label>
@@ -17,4 +17,4 @@
         <hr>
     </form>
 {% endblock form %}
-{% block submit_text %}{% trans 'Zwolnij miejsce' %}{% endblock submit_text %}
+{% block submit_text %}{% trans 'Release the berth' %}{% endblock submit_text %}

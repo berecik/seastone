@@ -7,19 +7,19 @@
     {% endblock script %}
 </textarea>
 <div id="title_{{ place_id }}" class="row">
-    <b class="pull-left">{{ place.pier.name }} {% trans 'Miejsce postojowe' %} {{ place.name }} ({{ place.min_length }}-{{ place.max_length }} {% if lenght_unit_plural %}{{ lenght_unit_plural }}{% elif lenght_unit %}{{ lenght_unit }}{% else %}{% trans 'metrów' %}{% endif %})</b>
-    {% block edit_button %}<button id="edit_{{ place_id }}" class="pull-right">{% trans 'Edytuj miejsce postojowe' %}</button>{% endblock edit_button %}
+    <b class="pull-left">{{ place.pier.name }} {% trans 'Berth' %} {{ place.name }} ({{ place.min_length }}-{{ place.max_length }} {% if lenght_unit_plural %}{{ lenght_unit_plural }}{% elif lenght_unit %}{{ lenght_unit }}{% else %}{% trans 'meters' %}{% endif %})</b>
+    {% block edit_button %}<button id="edit_{{ place_id }}" class="pull-right">{% trans 'Edit berth' %}</button>{% endblock edit_button %}
 </div>
 <hr>
-<div id="add_stay_{{ place_id }}" title="{% trans 'Dodaj postój' %}">
+<div id="add_stay_{{ place_id }}" title="{% trans 'Add layover' %}">
     {% block form %}
     {% endblock form%}
     <fieldset>
         {% block buttons %}
         {% block submit %}
-            <button id="submit_{{ place_id }}" class="pull-left">{% block submit_text %}{% trans 'Zapisz' %}{% endblock submit_text %}</button>
+            <button id="submit_{{ place_id }}" class="pull-left">{% block submit_text %}{% trans 'Save' %}{% endblock submit_text %}</button>
         {% endblock submit %}
-        <button id="close_{{ place_id }}" class="pull-right">{% trans 'Zamknij' %}</button>
+        <button id="close_{{ place_id }}" class="pull-right">{% trans 'Close' %}</button>
         {% endblock buttons %}
     </fieldset>
 </div>

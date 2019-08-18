@@ -20,7 +20,7 @@
 {#    <ul>#}
         {% for connector in connectors %}
             <div class="row">
-                {{ connector.name }}: {% if not connector.conected %}<button id="connect_{{ connector.id }}">{% trans 'Podłącz jacht' %}</button>{% else %} {{ connector.current_place }} {{ connector.current_ship }}{% endif %} {% trans 'Licznik:' %} <input type="number" name="counter_{{ connector.id }}" value="{{ connector.counter }}" class="serial">
+                {{ connector.name }}: {% if not connector.conected %}<button id="connect_{{ connector.id }}">{% trans 'Connect boat' %}</button>{% else %} {{ connector.current_place }} {{ connector.current_ship }}{% endif %} {% trans 'Meter' %} <input type="number" name="counter_{{ connector.id }}" value="{{ connector.counter }}" class="serial">
             </div>
         {% endfor %}
 {#    </ul>#}
@@ -28,7 +28,7 @@
     <fieldset>
         {% block buttons %}
             {% block submit %}
-                <button id="save_counters_{{ hub_id }}" class="pull-left">{% block submit_text %}{% trans 'Zapisz liczniki' %}{% endblock submit_text %}</button>
+                <button id="save_counters_{{ hub_id }}" class="pull-left">{% block submit_text %}{% trans 'Save the meter status' %}{% endblock submit_text %}</button>
             {% endblock submit %}
             <button id="close_hub_{{ hub_id }}" class="pull-right">{% trans 'Zamknij' %}</button>
         {% endblock buttons %}
