@@ -45,16 +45,10 @@ def check_action(action_list, *action_decorators):
                 if len(action_data) == 2:
                     _decorators = decorators
                 else:
-                    if action_data[2]:
-                        _decorators = action_data[2]
-                    else:
-                        _decorators = lambda f: f
+                    _decorators = action_data[2] if action_data[2] else (lambda f: f)
                 if action_data[0] in request.GET:
                     action_id = request.GET[action_data[0]]
-                    if action_id:
-                        kwargs["_id"] = action_id
-                    else:
-                        kwargs["_id"] = None
+                    kwargs["_id"] = action_id if action_id else None
                     return _decorators(action_data[1])(request, *args, **kwargs)
             return view_fun(request, *args, **kwargs)
         return _view_fun

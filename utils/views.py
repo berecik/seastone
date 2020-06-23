@@ -5,8 +5,7 @@ import common_settings
 
 
 def render_js(request, *args, **kwargs):
-    response = render(request, *args, **kwargs)
-    return response
+    return render(request, *args, **kwargs)
 
 def settings_js(request):
     _settings = {}
@@ -17,5 +16,4 @@ def settings_js(request):
     context = {
         "settings_dir": _settings
     }
-    response = render(request, "settings.js", context)
-    return response
+    return render(request, "settings.js", context)

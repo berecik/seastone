@@ -55,22 +55,17 @@ class PlaceDelete(DeleteView):
 
 def _get_marina(*args, **kwargs):
     marina, created = Marina.objects.get_or_create(name=u"Marina Kamień Pomorski")
-    _marina_dict = {
+    return {
         "marina": marina,
     }
-    return _marina_dict
 
 
 def _get_get(request, *args, **kwargs):
-    _kwargs = {}
-    for name in request.GET:
-        _kwargs[name] = request.GET[name]
+    _kwargs = {name: request.GET[name] for name in request.GET}
 
 
 def _get_post(request, *args, **kwargs):
-    _kwargs = {}
-    for name in request.POST:
-        _kwargs[name] = request.POST[name]
+    _kwargs = {name: request.POST[name] for name in request.POST}
 
 
 def _get_boat_size(request, *args, **kwargs):
@@ -91,22 +86,13 @@ def _get_boat_size(request, *args, **kwargs):
 def _get_range(request, *args, **kwargs):
     "&date_start=2016-7-4&date_end=2016-7-4"
     date_start_txt = request.GET.get('date_start', None)
-    if date_start_txt:
-        date_start = iso_to_py_date(date_start_txt)
-    else:
-        date_start = date.today()
-
+    date_start = iso_to_py_date(date_start_txt) if date_start_txt else date.today()
     date_end_txt = request.GET.get('date_end', None)
-    if date_end_txt:
-        date_end = iso_to_py_date(date_end_txt)
-    else:
-        date_end = date.today()
-
-    _range = {
+    date_end = iso_to_py_date(date_end_txt) if date_end_txt else date.today()
+    return {
         "date_start": date_start,
         "date_end": date_end
     }
-    return _range
 
 
 def close_popup(request, _id=None, **kwargs):

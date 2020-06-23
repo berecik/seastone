@@ -13,10 +13,12 @@ class MarinaAdmin(admin.ModelAdmin):
 admin.site.register(Marina, MarinaAdmin)
 
 
+
+
 class PlaceAdmin(admin.ModelAdmin):
-    pass
     list_display = ('name', 'pier', 'order')
     list_display_links = ('name',)
+
 
 admin.site.register(Place, PlaceAdmin)
 
@@ -37,10 +39,12 @@ class LeaveAdmin(admin.ModelAdmin):
 admin.site.register(Leave, LeaveAdmin)
 
 
+
+
 class PierAdmin(admin.ModelAdmin):
-    pass
     list_display = ('name', 'order')
     list_display_links = ('name',)
+
 
 admin.site.register(Pier, PierAdmin)
 

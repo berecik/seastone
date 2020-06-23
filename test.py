@@ -9,11 +9,7 @@ def first_unique(arr):
     unique = {}
 
     for x in arr:
-        if x in unique:
-            unique[x] = False
-        else:
-            unique[x] = True
-
+        unique[x] = False if x in unique else True
     for x, v in unique.items():
         if v:
             return x

@@ -34,10 +34,7 @@ class Command(BaseCommand):
         try:
             assert settings.CACHES
             all_keys = settings.CACHES.keys()
-            if 'clear_all' in options:
-                clear_all = options['clear_all']
-            else:
-                clear_all = False
+            clear_all = options['clear_all'] if 'clear_all' in options else False
             if clear_all:
                 num_cleared = 0
                 for x, key in enumerate(all_keys):

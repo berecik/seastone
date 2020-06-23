@@ -155,8 +155,7 @@ class Stay(Occupation):
     def current_connector(self):
         connection = Connection.objects.filter(stay=self)
         if connection:
-            connector = connection[0].connector
-            return connector
+            return connection[0].connector
         return None
 
     def __unicode__(self):
@@ -169,8 +168,7 @@ class Contract(Occupation):
     def current_connector(self):
         connection = Connection.objects.filter(contract=self)
         if connection:
-            connector = connection[0].connector
-            return connector
+            return connection[0].connector
         return None
 
     def __unicode__(self):
@@ -192,8 +190,7 @@ class Connector(models.Model):
 
     @property
     def last_connection(self):
-        conection = Connection.objects.filter(connector=self).last()
-        return conection
+        return Connection.objects.filter(connector=self).last()
 
     @property
     def counter(self):
@@ -207,13 +204,10 @@ class Connector(models.Model):
 
     @property
     def conected(self):
-        if self.last_connection:
-            if self.last_connection.counter_end:
-                return False
-            else:
-                return True
-        else:
-            return False
+        return bool(
+            not (self.last_connection and self.last_connection.counter_end)
+            and self.last_connection
+        )
 
     @property
     def current_occupation(self):
